@@ -11,6 +11,8 @@ namespace DSModels
         
         public string Gender {get; set;}
 
+        public double Price {get; set;}
+        
         public override string ToString(){
             return $"Breed: {Breed}, Gender: {Gender}";
         }
