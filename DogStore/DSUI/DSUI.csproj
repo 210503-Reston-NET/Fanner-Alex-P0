@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DSModels\DSModels.csproj" />
+    <ProjectReference Include="..\DSBL\DSBL.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
