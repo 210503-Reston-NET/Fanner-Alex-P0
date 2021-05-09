@@ -7,7 +7,7 @@ namespace DSUI
     {
         static void Main(string[] args)
         {
-            IMenu menu = new GeneralMenu(new IStoreLocationBL());
+            IMenu menu = new GeneralMenu(new StoreLocationBL());
             menu.OnStart();
         }
         

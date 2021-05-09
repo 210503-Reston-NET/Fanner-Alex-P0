@@ -6,11 +6,12 @@ namespace DSBL
 {
     public class StoreLocationBL:IStoreLocationBL
     {
-        List<StoreLocation> GetAllStoreLocations(){
+        public List<StoreLocation> GetAllStoreLocations(){
             return DSSCStorage.StoreList;
         }
-        StoreLocation AddStoreLocation(StoreLocation store){
+        public StoreLocation AddStoreLocation(StoreLocation store){
             DSSCStorage.StoreList.Add(store);
+            return store;
         }
     }
 }

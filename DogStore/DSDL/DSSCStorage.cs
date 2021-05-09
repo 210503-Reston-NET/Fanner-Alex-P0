@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using System.Collections.Generic;
 using DSModels;
 namespace DSDL
@@ -7,7 +6,7 @@ namespace DSDL
     {
         public static List<Dog> DogList = new List<Dog>();
 
-        public static List<StoreLocation> StoreList = new List<Store>();
+        public static List<StoreLocation> StoreList = new List<StoreLocation>();
 
         public static List<DogBuyer> BuyerList = new List<DogBuyer>();
 

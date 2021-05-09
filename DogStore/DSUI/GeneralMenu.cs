@@ -23,7 +23,7 @@ namespace DSUI
                 Console.WriteLine("[4] Find a customer");
                 Console.WriteLine("[5] See a customer's orders");
                 Console.WriteLine("[6] See a location's orders");
-                Console.WriteLine("[7] Add a Store")
+                Console.WriteLine("[7] Add a Store");
                 
                 string input = Console.ReadLine();
                 switch(input){
@@ -37,7 +37,8 @@ namespace DSUI
                         OrderDog();
                         break;
                     case "7":
-                        StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation());
+                        StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
+                        break;
                     default:
                         repeat = false;
                         break;
