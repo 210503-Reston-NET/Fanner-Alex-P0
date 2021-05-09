@@ -12,6 +12,6 @@ namespace DSDL
 
         public static List<DogManager> ManagerList = new List<DogManager>();
 
-        
+        public static List<Item> ItemList = new List<Item>();
     }
 }
