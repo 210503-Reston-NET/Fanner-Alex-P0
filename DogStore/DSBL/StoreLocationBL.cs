@@ -13,5 +13,10 @@ namespace DSBL
             DSSCStorage.StoreList.Add(store);
             return store;
         }
+
+        public List<Item> GetStoreInventory(string address, string location)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,12 +1,15 @@
 using System;
 using DSModels;
 using DSBL;
+using System.Collections.Generic;
 namespace DSUI
 {
     public class CustomerMenu : IMenu
     {
         private IStoreLocationBL _storeLoBL;
         private IBuyerBL _buyerBL;
+        private string _address;
+        private string _location;
         public CustomerMenu( IStoreLocationBL StoreLoBL, IBuyerBL BuyerBL){
             this._storeLoBL = StoreLoBL;
             this._buyerBL = BuyerBL;
@@ -26,7 +29,9 @@ namespace DSUI
                 string input = Console.ReadLine();
                 switch(input){
                     case "0":
-                        ViewStoreList();
+                        foreach(StoreLocation s in ViewStoreList()){
+                            Console.WriteLine(s.ToString());
+                        }
                         break;
                     case "1":
                         ViewStoreInv();
@@ -76,16 +81,72 @@ namespace DSUI
                     Console.WriteLine("Invalid input");
                     return;
             }
+            bool repeat = true;
+            do{
+                Console.WriteLine("What store would you like to buy from?");
+                Console.WriteLine("[0] View list of stores");
+                Console.WriteLine("[1] I know what store I want to order from");
+                input = Console.ReadLine();
+                switch(input){
+                    case "0":
+                        foreach(StoreLocation s in ViewStoreList()){
+                            Console.WriteLine(s.ToString());
+                        }
+                        repeat = false;
+                        break;
+                    case "1":
+                        repeat = false;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input");
+                        break;
+                }
+            }while(repeat);
+            repeat = true;
+            do{
+                Console.WriteLine("Enter the store you'd like to buy from");
+                Console.WriteLine("[0] View list of stores");
+                Console.WriteLine("[1] I know what store I want to order from");
+                input = Console.ReadLine();
+                switch(input){
+                    case "0":
+                        foreach(StoreLocation s in ViewStoreList()){
+                            Console.WriteLine(s.ToString());
+                        }
+                        repeat = false;
+                        break;
+                    case "1":
+                        repeat = false;
+                        break;
+                    default:
+                        Console.WriteLine("Invalid input");
+                        break;
+                }
+            }while(repeat);
+            
+            ViewStoreInv();
         }
 
         private void ViewStoreInv()
         {
-            throw new NotImplementedException();
+            bool repeat = true;
+            do{
+                Console.WriteLine("Enter the address of the store");
+                _address = Console.ReadLine();
+                Console.WriteLine("Enter the location name of the store");
+                _location = Console.ReadLine();
+                try{
+                    
+                }
+                catch(Exception e){
+
+                }
+            }while(repeat);
         }
 
-        private void ViewStoreList()
+        private List<StoreLocation> ViewStoreList()
         {
-            throw new NotImplementedException();
+            return _storeLoBL.GetAllStoreLocations();
         }
     }
 }

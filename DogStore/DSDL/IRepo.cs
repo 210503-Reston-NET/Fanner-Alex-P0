@@ -1,11 +1,10 @@
-//System.Security.Cryptography.X509Certificates;
 using DSModels;
 using System.Collections.Generic;
-namespace DSBL
+namespace DSDL
 {
-    public interface IStoreLocationBL
+    public interface IRepo
     {
-        List<StoreLocation> GetAllStoreLocations();
+         List<StoreLocation> GetAllStoreLocations();
         StoreLocation AddStoreLocation(StoreLocation store);
 
         List<Item> GetStoreInventory(string address, string location);
