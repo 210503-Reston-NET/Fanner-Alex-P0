@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using DSModels;
 using System.IO;
@@ -30,7 +31,24 @@ namespace DSDL
 
         public List<Item> GetStoreInventory(string address, string location)
         {
-            throw new System.NotImplementedException();
+            try{
+                return FindStore(address, location).GetInventory();
+            } catch(Exception){
+                return new List<Item>();
+            }
+        }
+
+        public StoreLocation FindStore(string address, string location){
+            StoreLocation store = new StoreLocation(address, location);
+            return GetAllStoreLocations().FirstOrDefault(stor => stor.Equals(store));
+        }
+        public StoreLocation RemoveStore(string address, string location){
+            List<StoreLocation> storesFromFile = GetAllStoreLocations();
+            StoreLocation store = FindStore(address, location);
+            storesFromFile.Remove(store);
+            jsonString = JsonSerializer.Serialize(storesFromFile);
+            File.WriteAllText(storePath, jsonString);
+            return store;
         }
     }
 }

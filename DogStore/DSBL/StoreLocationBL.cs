@@ -6,17 +6,25 @@ namespace DSBL
 {
     public class StoreLocationBL:IStoreLocationBL
     {
+        private Repo _repoDS = new Repo();
         public List<StoreLocation> GetAllStoreLocations(){
-            return DSSCStorage.StoreList;
+            return _repoDS.GetAllStoreLocations();
         }
         public StoreLocation AddStoreLocation(StoreLocation store){
-            DSSCStorage.StoreList.Add(store);
-            return store;
+            return _repoDS.AddStoreLocation(store);
         }
 
         public List<Item> GetStoreInventory(string address, string location)
         {
-            throw new System.NotImplementedException();
+            return _repoDS.GetStoreInventory(address, location);
+        }
+        public StoreLocation GetStore(string address, string location){
+            return _repoDS.FindStore(address, location);
+        }
+
+        public StoreLocation RemoveStore(string address, string location)
+        {
+            return _repoDS.RemoveStore(address, location);
         }
     }
 }

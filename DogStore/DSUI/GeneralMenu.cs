@@ -15,18 +15,19 @@ namespace DSUI
             bool repeat = true;
             do{
                 Console.WriteLine("Welcome to the Fanner Furry Friends Dog Ordering Service!");
-                Console.WriteLine("How can I Help you?");
+                //Console.WriteLine("How can I Help you?");
                 Console.WriteLine("Enter a letter corresponding to your user status");
-                Console.WriteLine("[0] See list of stores");
+                /*Console.WriteLine("[0] See list of stores");
                 Console.WriteLine("[1] See a shop's inventory");
                 Console.WriteLine("[2] Order a random dog");
                 Console.WriteLine("[3] Add a customer");
                 Console.WriteLine("[4] Find a customer");
                 Console.WriteLine("[5] See a customer's orders");
                 Console.WriteLine("[6] See a location's orders");
-                Console.WriteLine("[7] Add a Store");
+                Console.WriteLine("[7] Add a Store");*/
                 Console.WriteLine("[a] A customer");
-                
+                Console.WriteLine("[b] A manager");
+
                 string input = Console.ReadLine();
                 switch(input){
                     case "0":
@@ -44,6 +45,10 @@ namespace DSUI
                     case "a":
                         IMenu _custMenu = new CustomerMenu(_storeLoBL, new DogBuyerBL());
                         _custMenu.OnStart();
+                        break;
+                    case "b":
+                        IMenu _managerMenu = new ManagerMenu(_storeLoBL);
+                        _managerMenu.OnStart();
                         break;
                     default:
                         repeat = false;
