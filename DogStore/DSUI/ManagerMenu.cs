@@ -28,7 +28,7 @@ namespace DSUI
                         _location = Console.ReadLine();
                         Console.WriteLine("Enter the store's address:");
                         _address = Console.ReadLine();
-                        StoreLocation store = new StoreLocation(_location, _address);
+                        StoreLocation store = new StoreLocation(_address,_location);
                         _storeLoBL.AddStoreLocation(store);
                         break;
                     case "1":
@@ -45,9 +45,9 @@ namespace DSUI
             _location = Console.ReadLine();
             Console.WriteLine("Enter the store's address:");
             _address = Console.ReadLine();
-            try{
+            //try{
                 _store = _storeLoBL.GetStore(_address,_location);
-                _storeLoBL.RemoveStore(_address,_location);
+                //_storeLoBL.RemoveStore(_address,_location);
                 Console.WriteLine("Enter breed of the dog");
                 string breed = Console.ReadLine();
                 Console.WriteLine("Enter gender of the dog");
@@ -56,12 +56,13 @@ namespace DSUI
                 Console.WriteLine("How many?");
                 int quant = int.Parse(Console.ReadLine());
                 Item ite = new Item(dog, quant);
+                Console.WriteLine(_store.ToString());
                 _store.AddItem(ite);
                 _storeLoBL.AddStoreLocation(_store);
                 Console.WriteLine("Thanks!");
-            }catch(Exception){
-                Console.WriteLine("Can't find the store");
-            }
+            //}catch(Exception e){
+                //Console.WriteLine(e.print);
+            //}
         
         }
     }

@@ -136,10 +136,13 @@ namespace DSUI
                 Console.WriteLine("Enter the location name of the store");
                 _location = Console.ReadLine();
                 try{
-                    
+                    foreach(Item i in _storeLoBL.GetStoreInventory(_address,_location)){
+                        i.ToString();
+                    }
                 }
                 catch(Exception e){
-
+                    repeat = true;
+                    Console.WriteLine("Didn't work, please try again.");
                 }
             }while(repeat);
         }

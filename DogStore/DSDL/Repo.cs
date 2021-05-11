@@ -15,6 +15,7 @@ namespace DSDL
         private string jsonString;
         private string invPath;
         private string jsonInv;
+        private List<StoreLocation> _stores = new List<StoreLocation>();
         /// <summary>
         /// Method to add store location to the file. Adds a store to a file and returns
         /// the added store.
@@ -23,7 +24,7 @@ namespace DSDL
         /// <returns>Return added StoreLocation</returns>
         public StoreLocation AddStoreLocation(StoreLocation store)
         {
-            List<StoreLocation> storesFromFile = GetAllStoreLocations();
+            /*List<StoreLocation> storesFromFile = GetAllStoreLocations();
             storesFromFile.Add(store);
             jsonString = JsonSerializer.Serialize(storesFromFile);
             foreach(StoreLocation s in storesFromFile){
@@ -31,7 +32,8 @@ namespace DSDL
                 jsonInv = JsonSerializer.Serialize(s.GetInventory());
                 File.WriteAllText(invPath, jsonInv);
             }
-            File.WriteAllText(storePath, jsonString);
+            File.WriteAllText(storePath, jsonString);*/
+            _stores.Add(store);
             return store;
         }
 
@@ -41,7 +43,7 @@ namespace DSDL
         /// <returns>List of StoreLocation stored in the JSON</returns>
         public List<StoreLocation> GetAllStoreLocations()
         {
-            try{
+            /*try{
                 jsonString = File.ReadAllText(storePath);
             } catch(Exception){
                 return new List<StoreLocation>();
@@ -51,8 +53,8 @@ namespace DSDL
                 invPath = "../DSDL/"+s.Location;
                 jsonInv = File.ReadAllText(invPath);
                 s.SetInventory(JsonSerializer.Deserialize<List<Item>>(jsonInv));
-            }
-            return sList;
+            }*/
+            return _stores;
         }
         /// <summary>
         /// Gets a store from memory and returns the Inventory as a List of Items.
@@ -86,11 +88,12 @@ namespace DSDL
         /// <param name="location"> Name of the store you want to remove.</param>
         /// <returns> Store which was removed from memory.</returns>
         public StoreLocation RemoveStore(string address, string location){
-            List<StoreLocation> storesFromFile = GetAllStoreLocations();
+            //List<StoreLocation> storesFromFile = GetAllStoreLocations();
             StoreLocation store = FindStore(address, location);
-            storesFromFile.Remove(store);
+            /*storesFromFile.Remove(store);
             jsonString = JsonSerializer.Serialize(storesFromFile);
-            File.WriteAllText(storePath, jsonString);
+            File.WriteAllText(storePath, jsonString);*/
+            _stores.Remove(store);
             return store;
         }
     }

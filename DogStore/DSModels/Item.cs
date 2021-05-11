@@ -24,5 +24,9 @@ namespace DSModels
         /// </summary>
         /// <value></value>
         public int Quantity {get; set; }
+        public override string ToString()
+        {
+            return "Dog: " + this.Dog + " Quantity: " + this.Quantity;
+        }
     }
 }

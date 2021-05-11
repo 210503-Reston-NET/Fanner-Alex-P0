@@ -57,7 +57,7 @@ namespace DSModels
         /// <returns>string representing the store's information</returns>
         public override string ToString()
         {
-            return "Address:_" + this.Address + "Location:_" + this.Location;
+            return "Address: " + this.Address + " Location: " + this.Location;
         }
         public bool Equals(StoreLocation store){
             return this.Address.Equals(store.Address) && this.Location.Equals(store.Location);
