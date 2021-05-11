@@ -48,13 +48,16 @@ namespace DSModels
         public List<Item> GetInventory(){
             return _inventory;
         }
+        public void SetInventory(List<Item> iList){
+            _inventory = iList;
+        }
         /// <summary>
         /// Overriding the ToString() method to return basic information of the store.
         /// </summary>
         /// <returns>string representing the store's information</returns>
         public override string ToString()
         {
-            return "Address: " + this.Address + " Location: " + this.Location;
+            return "Address:_" + this.Address + "Location:_" + this.Location;
         }
         public bool Equals(StoreLocation store){
             return this.Address.Equals(store.Address) && this.Location.Equals(store.Location);
