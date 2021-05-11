@@ -55,5 +55,10 @@ namespace DSBL
         {
             return _repoDS.RemoveStore(address, location);
         }
+
+        public Item FindItem(StoreLocation store, Dog dog, int quant)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

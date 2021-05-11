@@ -45,7 +45,7 @@ namespace DSUI
             _location = Console.ReadLine();
             Console.WriteLine("Enter the store's address:");
             _address = Console.ReadLine();
-            //try{
+            try{
                 _store = _storeLoBL.GetStore(_address,_location);
                 //_storeLoBL.RemoveStore(_address,_location);
                 Console.WriteLine("Enter breed of the dog");
@@ -55,14 +55,15 @@ namespace DSUI
                 Dog dog = new Dog(breed, gender);
                 Console.WriteLine("How many?");
                 int quant = int.Parse(Console.ReadLine());
+                
                 Item ite = new Item(dog, quant);
                 Console.WriteLine(_store.ToString());
                 _store.AddItem(ite);
                 _storeLoBL.AddStoreLocation(_store);
                 Console.WriteLine("Thanks!");
-            //}catch(Exception e){
-                //Console.WriteLine(e.print);
-            //}
+            }catch(Exception e){
+                Console.WriteLine("Error while stocking");
+            }
         
         }
     }

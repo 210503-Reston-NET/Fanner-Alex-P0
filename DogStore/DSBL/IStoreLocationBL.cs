@@ -11,5 +11,6 @@ namespace DSBL
         List<Item> GetStoreInventory(string address, string location);
         StoreLocation GetStore(string address, string location);
         StoreLocation RemoveStore(string address, string location);
+        Item FindItem(StoreLocation store, Dog dog, int quant);
     }
 }

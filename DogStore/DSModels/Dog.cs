@@ -39,5 +39,8 @@ namespace DSModels
         public override string ToString(){
             return $"Breed: {Breed}, Gender: {Gender}, Price: {Price.ToString()}";
         }
+        public bool Equal(Dog d){
+            return (d.Breed.Equals(this.Breed))&&(d.Gender.Equals(this.Gender));
+        }
     }
 }
