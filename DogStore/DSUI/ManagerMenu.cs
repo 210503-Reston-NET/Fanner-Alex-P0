@@ -40,11 +40,11 @@ namespace DSUI
                 }
             }while(repeat);
         }
-        private void StockShelves(){        
+        private void StockShelves(){    
+            Console.WriteLine("Enter the store's address:");
+            _address = Console.ReadLine();    
             Console.WriteLine("Enter the name of the store you're stocking:");
             _location = Console.ReadLine();
-            Console.WriteLine("Enter the store's address:");
-            _address = Console.ReadLine();
             try{
                 _store = _storeLoBL.GetStore(_address,_location);
                 //_storeLoBL.RemoveStore(_address,_location);
@@ -56,9 +56,8 @@ namespace DSUI
                 Console.WriteLine("How many?");
                 int quant = int.Parse(Console.ReadLine());
                 
-                Item ite = new Item(dog, quant);
                 Console.WriteLine(_store.ToString());
-                _store.AddItem(ite);
+                _storeLoBL.AddItem(_store, dog, quant);
                 _storeLoBL.AddStoreLocation(_store);
                 Console.WriteLine("Thanks!");
             }catch(Exception e){

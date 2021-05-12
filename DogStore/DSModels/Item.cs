@@ -28,8 +28,8 @@ namespace DSModels
         {
             return "Dog: " + this.Dog + " Quantity: " + this.Quantity;
         }
-        public bool Equal(Dog d){
-            return this.Dog.Equal(d);
+        public bool Equals(Dog d){
+            return this.Dog.Equals(d);
         }
     }
 }

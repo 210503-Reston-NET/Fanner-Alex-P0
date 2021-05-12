@@ -137,12 +137,15 @@ namespace DSUI
                 _location = Console.ReadLine();
                 try{
                     foreach(Item i in _storeLoBL.GetStoreInventory(_address,_location)){
-                        i.ToString();
+                        Console.WriteLine(i.ToString());
                     }
+                    repeat = false;
                 }
                 catch(Exception e){
                     repeat = true;
-                    Console.WriteLine("Didn't work, please try again.");
+                    Console.WriteLine("That didn't work.");
+                    Console.WriteLine("Enter q to exit or any other character to continue");
+                    if(Console.ReadLine().Equals("q")) repeat = false;
                 }
             }while(repeat);
         }

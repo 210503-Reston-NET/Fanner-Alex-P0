@@ -58,7 +58,17 @@ namespace DSBL
 
         public Item FindItem(StoreLocation store, Dog dog, int quant)
         {
-            throw new System.NotImplementedException();
+            return _repoDS.FindItem(store, dog, quant);
+        }
+
+        public Item UpdateItem(StoreLocation store, Dog dog, int quant)
+        {
+            return _repoDS.UpdateItem(store, dog, quant);
+        }
+
+        public Item AddItem(StoreLocation store, Dog dog, int quant)
+        {
+            return _repoDS.AddItem(store, dog, quant);
         }
     }
 }

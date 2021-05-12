@@ -15,7 +15,7 @@ namespace DSDL
         private string jsonString;
         private string invPath;
         private string jsonInv;
-        private List<StoreLocation> _stores = new List<StoreLocation>();
+        private List<StoreLocation> _stores;
         /// <summary>
         /// Method to add store location to the file. Adds a store to a file and returns
         /// the added store.
@@ -33,7 +33,13 @@ namespace DSDL
                 File.WriteAllText(invPath, jsonInv);
             }
             File.WriteAllText(storePath, jsonString);*/
-            _stores.Add(store);
+            try{
+                _stores.Add(store);
+            }
+            catch(Exception){
+                _stores = new List<StoreLocation>();
+                _stores.Add(store);
+            }
             return store;
         }
 
@@ -70,6 +76,23 @@ namespace DSDL
                 return new List<Item>();
             }
         }
+
+        public Item AddItem(StoreLocation store, Dog dog, int quant)
+        {
+            Item newItem = new Item(dog, quant);
+            try{
+            string add = FindStore(store.Address, store.Location).Address;
+            string loc = FindStore(store.Address, store.Location).Location;
+            GetStoreInventory(add, loc).First(item => item.Equals(newItem)).Quantity += quant;
+            return newItem;
+            }
+            catch(Exception){
+                Console.WriteLine("New item added");
+                GetAllStoreLocations().FirstOrDefault(stor => stor.Equals(store)).AddItem(newItem);
+                return newItem;
+            }
+        }
+
         /// <summary>
         /// Finds and returns the result of a LINQ query which matches on an 
         /// address and location of a store.
@@ -95,6 +118,32 @@ namespace DSDL
             File.WriteAllText(storePath, jsonString);*/
             _stores.Remove(store);
             return store;
+        }
+
+        public Item FindItem(StoreLocation store, Dog dog, int quant)
+        {
+            Item newItem = new Item(dog, quant);
+            try{
+            string add = FindStore(store.Address, store.Location).Address;
+            string loc = FindStore(store.Address, store.Location).Location;
+            return GetStoreInventory(add, loc).First(item => item.Equals(newItem));
+            }
+            catch(Exception){
+                Console.WriteLine("Item not found");
+                return new Item(dog, quant);
+            }
+        }
+
+        public Item UpdateItem(StoreLocation store, Dog dog, int quant)
+        {
+            try{
+                Item itemToBeInc = FindItem(store, dog, quant);
+                itemToBeInc.Quantity += quant;
+                return itemToBeInc;
+            }catch(Exception){
+                Console.WriteLine("Item not found");
+                return new Item(dog, quant);
+            }
         }
     }
 }
