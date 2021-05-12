@@ -19,7 +19,7 @@ namespace DSModels
             this.Address = address;
             this.Location = location;
             this._inventory = new List<Item>();
-            this._inventory.Add(new Item(new Dog("Blue Heeler", "Female"),1));
+            this._inventory.Add(new Item(new Dog("Blue Heeler", "Female", 1000.00),1));
         }
         /// <summary>
         /// String representing the address of the store.

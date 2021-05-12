@@ -125,6 +125,7 @@ namespace DSUI
             }while(repeat);
             
             ViewStoreInv();
+            Console.WriteLine("Select the item you'd like to buy from the store's inventory");
         }
 
         private void ViewStoreInv()

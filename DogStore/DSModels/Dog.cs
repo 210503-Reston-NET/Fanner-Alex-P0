@@ -1,3 +1,4 @@
+using System;
 namespace DSModels
 {
     /// <summary>
@@ -10,9 +11,11 @@ namespace DSModels
         /// </summary>
         /// <param name="breed"> Breed of the dog</param>
         /// <param name="gender"> Dog's gender</param>
-        public Dog(string breed, string gender){
+        /// <param name="price"> Dog's price</param>
+        public Dog(string breed, string gender, double price){
             this.Breed = breed;
             this.Gender = gender;
+            this.Price = price;
         }
         /// <summary>
         /// String representing dog's breed.
@@ -40,6 +43,8 @@ namespace DSModels
             return $"Breed: {Breed}, Gender: {Gender}, Price: {Price.ToString()}";
         }
         public bool Equals(Dog d){
+            Console.WriteLine(d.ToString());
+            Console.WriteLine(this.ToString());
             return (d.Breed.Equals(this.Breed))&&(d.Gender.Equals(this.Gender));
         }
     }

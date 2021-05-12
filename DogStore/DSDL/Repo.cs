@@ -16,6 +16,8 @@ namespace DSDL
         private string invPath;
         private string jsonInv;
         private List<StoreLocation> _stores;
+        private List<DogOrder> _orders;
+        private List<DogBuyer> _buyers;
         /// <summary>
         /// Method to add store location to the file. Adds a store to a file and returns
         /// the added store.
@@ -84,11 +86,15 @@ namespace DSDL
             string add = FindStore(store.Address, store.Location).Address;
             string loc = FindStore(store.Address, store.Location).Location;
             GetStoreInventory(add, loc).First(item => item.Equals(newItem)).Quantity += quant;
+            GetStoreInventory(add, loc).First(item => item.Equals(newItem)).Dog.Price = dog.Price;
             return newItem;
             }
             catch(Exception){
+                string add = FindStore(store.Address, store.Location).Address;
+                string loc = FindStore(store.Address, store.Location).Location;
                 Console.WriteLine("New item added");
                 GetAllStoreLocations().FirstOrDefault(stor => stor.Equals(store)).AddItem(newItem);
+                foreach(Item e in GetStoreInventory(add, loc)) Console.WriteLine(e.Dog.ToString());
                 return newItem;
             }
         }
