@@ -151,5 +151,17 @@ namespace DSDL
                 return new Item(dog, quant);
             }
         }
+
+        public DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl)
+        {
+            DogOrder order = new DogOrder(buyer, total, sl);
+            try{
+                _orders.Add(order);
+            }catch(Exception){
+                _orders = new List<DogOrder>();
+                _orders.Add(order);
+            }
+            return order;
+        }
     }
 }

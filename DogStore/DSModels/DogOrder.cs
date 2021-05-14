@@ -5,6 +5,11 @@ namespace DSModels
     /// </summary>
     public class DogOrder
     {
+        public DogOrder(DogBuyer buyer, double tot, StoreLocation sl){
+            this.DogBuyer = buyer;
+            this.StoreLocation = sl;
+            this.Total = tot;
+        }
         /// <summary>
         /// Customer ordering the dogs, represented by DogBuyer.
         /// </summary>

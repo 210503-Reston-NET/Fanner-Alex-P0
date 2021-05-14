@@ -11,8 +11,10 @@ namespace DSUI
         private string _location;
         private string _address;
         private StoreLocation _store;
-        public ManagerMenu( IStoreLocationBL StoreLoBL){
+        private IOrderBL _orBL;
+        public ManagerMenu( IStoreLocationBL StoreLoBL,IOrderBL OBL){
             this._storeLoBL = StoreLoBL;
+            this._orBL = OBL;
         }
         public void OnStart()
         {

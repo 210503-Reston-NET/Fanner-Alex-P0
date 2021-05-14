@@ -12,5 +12,6 @@ namespace DSDL
         Item UpdateItem(StoreLocation store, Dog dog, int quant);
 
         Item AddItem(StoreLocation store, Dog dog, int quant);
+        DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl);
     }
 }

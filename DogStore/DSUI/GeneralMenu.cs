@@ -43,11 +43,11 @@ namespace DSUI
                         StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
                         break;
                     case "a":
-                        IMenu _custMenu = new CustomerMenu(_storeLoBL, new DogBuyerBL());
+                        IMenu _custMenu = new CustomerMenu(_storeLoBL, new DogBuyerBL(),new OrderBL());
                         _custMenu.OnStart();
                         break;
                     case "b":
-                        IMenu _managerMenu = new ManagerMenu(_storeLoBL);
+                        IMenu _managerMenu = new ManagerMenu(_storeLoBL, new OrderBL());
                         _managerMenu.OnStart();
                         break;
                     default:

@@ -10,9 +10,12 @@ namespace DSUI
         private IBuyerBL _buyerBL;
         private string _address;
         private string _location;
-        public CustomerMenu( IStoreLocationBL StoreLoBL, IBuyerBL BuyerBL){
+        private IOrderBL _orBL;
+        private double _runningCount;
+        public CustomerMenu( IStoreLocationBL StoreLoBL, IBuyerBL BuyerBL, IOrderBL OBL){
             this._storeLoBL = StoreLoBL;
             this._buyerBL = BuyerBL;
+            this._orBL = OBL;
         }
         public void OnStart()
         {
@@ -125,7 +128,23 @@ namespace DSUI
             }while(repeat);
             
             ViewStoreInv();
-            Console.WriteLine("Select the item you'd like to buy from the store's inventory");
+            repeat = true;
+            _runningCount = 0;
+            do{
+                Console.WriteLine("Enter the address of the store");
+                _address = Console.ReadLine();
+                Console.WriteLine("Enter the location name of the store");
+                _location = Console.ReadLine();
+                Console.WriteLine("Enter the gender of dog you'd like to purchase");
+                string gender = Console.ReadLine();
+                Console.WriteLine("Enter the breed of the Dog you'd like to purchase");
+                string breed = Console.ReadLine();
+                Console.WriteLine("Enter how many you would like to purchase");
+                int quant = int.Parse(Console.ReadLine());
+                //get dog by id
+                _storeLoBL.FindItem(new StoreLocation(_address, _location), new Dog(breed, gender, 1000.0), quant);
+                //
+            }while(repeat);
         }
 
         private void ViewStoreInv()
