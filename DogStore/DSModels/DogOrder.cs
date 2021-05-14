@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 namespace DSModels
 {
     /// <summary>
@@ -5,11 +7,20 @@ namespace DSModels
     /// </summary>
     public class DogOrder
     {
+        private List<Item> _itemsInOrder;
+        private int id;
+        private DateTime _dateTime;
         public DogOrder(DogBuyer buyer, double tot, StoreLocation sl){
             this.DogBuyer = buyer;
             this.StoreLocation = sl;
             this.Total = tot;
+            _itemsInOrder = new List<Item>();
+            _dateTime = DateTime.Now;
         }
+        public DogOrder(DogBuyer buyer, double tot, StoreLocation sl, int id): this(buyer, tot, sl){
+            this.id = id;
+        }
+
         /// <summary>
         /// Customer ordering the dogs, represented by DogBuyer.
         /// </summary>
@@ -25,5 +36,12 @@ namespace DSModels
         /// </summary>
         /// <value></value>
         public double Total {get;set;}
+        public Item AddItemToOrder(Item item){
+            _itemsInOrder.Add(item);
+            return item;
+        }
+        public List<Item> GetItems(){
+            return _itemsInOrder;
+        }
     }
 }
