@@ -53,9 +53,9 @@ namespace DSUI
                 Console.WriteLine("Enter breed of the dog");
                 string breed = Console.ReadLine();
                 Console.WriteLine("Enter gender of the dog");
-                string gender = Console.ReadLine();
+                char[] gender = Console.ReadLine().ToCharArray();
                 Console.WriteLine("Enter price of dog");
-                Dog dog = new Dog(breed, gender, double.Parse(Console.ReadLine()));
+                Dog dog = new Dog(breed, gender[0], double.Parse(Console.ReadLine()));
                 Console.WriteLine("How many?");
                 int quant = int.Parse(Console.ReadLine());
                 

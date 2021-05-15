@@ -62,7 +62,7 @@ namespace DSUI
         {
             Console.WriteLine("What's your name?");
             string input = Console.ReadLine();
-            DogBuyer buyer = new DogBuyer();
+            DogBuyer buyer = new DogBuyer("a","b",1000);
             buyer.Name = input;
             Console.WriteLine(input + buyer.Name);
             _buyerBL.AddBuyer(buyer);
@@ -136,13 +136,13 @@ namespace DSUI
                 Console.WriteLine("Enter the location name of the store");
                 _location = Console.ReadLine();
                 Console.WriteLine("Enter the gender of dog you'd like to purchase");
-                string gender = Console.ReadLine();
+                char[] gender = Console.ReadLine().ToCharArray();
                 Console.WriteLine("Enter the breed of the Dog you'd like to purchase");
                 string breed = Console.ReadLine();
                 Console.WriteLine("Enter how many you would like to purchase");
                 int quant = int.Parse(Console.ReadLine());
                 //get dog by id
-                _storeLoBL.FindItem(new StoreLocation(_address, _location), new Dog(breed, gender, 1000.0), quant);
+                _storeLoBL.FindItem(new StoreLocation(_address, _location), new Dog(breed, gender[0], 1000.0), quant);
                 //
             }while(repeat);
         }

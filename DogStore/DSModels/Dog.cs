@@ -13,12 +13,12 @@ namespace DSModels
         /// <param name="breed"> Breed of the dog</param>
         /// <param name="gender"> Dog's gender</param>
         /// <param name="price"> Dog's price</param>
-        public Dog(string breed, string gender, double price){
+        public Dog(string breed, char gender, double price){
             this.Breed = breed;
             this.Gender = gender;
             this.Price = price;
         }
-        public Dog(string breed, string gender, double price, int id): this(breed, gender, price){
+        public Dog(string breed, char gender, double price, int id): this(breed, gender, price){
             this.id = id;
         }
         /// <summary>
@@ -31,7 +31,7 @@ namespace DSModels
         /// String representing dog's gender.
         /// </summary>
         /// <value></value>
-        public string Gender {get; set;}
+        public char Gender {get; set;}
 
         /// <summary>
         /// String representing how much the dog costs.
