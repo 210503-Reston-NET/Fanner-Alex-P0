@@ -1,9 +1,13 @@
+
 using System.Linq;
 using System.Collections.Generic;
+using Model = DSModels;
+using Entity = DSDL.Entities;
 using DSModels;
 using System.IO;
 using System.Text.Json;
 using System;
+using Microsoft.EntityFrameworkCore;
 namespace DSDL
 {
     /// <summary>
@@ -11,20 +15,22 @@ namespace DSDL
     /// </summary>
     public class Repo : IRepo
     {
-        private const string storePath = "../DSDL/Stores";
-        private string jsonString;
         private string invPath;
         private string jsonInv;
-        private List<StoreLocation> _stores;
+        private List<Model.StoreLocation> _stores;
         private List<DogOrder> _orders;
         private List<DogBuyer> _buyers;
+        private Entity.FannerDogsDBContext _context;
+        public Repo(Entity.FannerDogsDBContext context){
+            _context = context;
+        }
         /// <summary>
         /// Method to add store location to the file. Adds a store to a file and returns
         /// the added store.
         /// </summary>
         /// <param name="store">StoreLocation to add to memory</param>
         /// <returns>Return added StoreLocation</returns>
-        public StoreLocation AddStoreLocation(StoreLocation store)
+        public Model.StoreLocation AddStoreLocation(Model.StoreLocation store)
         {
             /*List<StoreLocation> storesFromFile = GetAllStoreLocations();
             storesFromFile.Add(store);
@@ -36,11 +42,16 @@ namespace DSDL
             }
             File.WriteAllText(storePath, jsonString);*/
             try{
-                _stores.Add(store);
+                Entity.DogStore dogStore = new Entity.DogStore();
+                dogStore.StoreName = store.Location;
+                dogStore.StoreAddress = store.Address;
+                _context.DogStores.Add(
+                    dogStore
+                );
+                _context.SaveChanges();
             }
-            catch(Exception){
-                _stores = new List<StoreLocation>();
-                _stores.Add(store);
+            catch(Exception ex){
+               Console.WriteLine(ex.Message);
             }
             return store;
         }
@@ -49,7 +60,7 @@ namespace DSDL
         /// Method that returns all the stores in memory.
         /// </summary>
         /// <returns>List of StoreLocation stored in the JSON</returns>
-        public List<StoreLocation> GetAllStoreLocations()
+        public List<Model.StoreLocation> GetAllStoreLocations()
         {
             /*try{
                 jsonString = File.ReadAllText(storePath);
@@ -62,7 +73,12 @@ namespace DSDL
                 jsonInv = File.ReadAllText(invPath);
                 s.SetInventory(JsonSerializer.Deserialize<List<Item>>(jsonInv));
             }*/
-            return _stores;
+            List<Model.StoreLocation> storeList = new List<Model.StoreLocation>();
+            List<Entity.DogStore> dogStoreList = (from DogStore in _context.DogStores select DogStore).ToList();
+            foreach(Entity.DogStore dS in dogStoreList){
+                storeList.Add(new StoreLocation(dS.Id, dS.StoreAddress,dS.StoreName));
+            }
+            return storeList;
         }
         /// <summary>
         /// Gets a store from memory and returns the Inventory as a List of Items.
@@ -70,19 +86,86 @@ namespace DSDL
         /// <param name="address"> Address of store you're looking for</param>
         /// <param name="location"> Name of store you're looking for</param>
         /// <returns>List of items responding to the store's inventory.</returns>
-        public List<Item> GetStoreInventory(string address, string location)
+        public List<Model.Item> GetStoreInventory(string address, string location)
         {
+            //StoreLocation sL = new StoreLocation(address, location);
             try{
-                return FindStore(address, location).GetInventory();
+                Entity.DogStore dS = (
+                                        from DogStore in _context.DogStores where 
+                                        DogStore.StoreAddress == address && DogStore.StoreName == location
+                                        select DogStore
+                                        ).Single();
+                List<Entity.Inventory> iList = dS.Inventories.ToList();
+                List<Model.Item> itemList = new List<Model.Item>();
+                foreach(Entity.Inventory i in iList){
+                    itemList.Add(new Model.Item(new Model.Dog(i.Dog.Breed,i.Dog.Gender.ToCharArray()[0], i.Dog.Price),i.Quantity.Value));
+                }
+                return itemList;
             } catch(Exception){
-                return new List<Item>();
+                return new List<Model.Item>();
             }
         }
 
-        public Item AddItem(StoreLocation store, Dog dog, int quant)
+        public Model.Item AddItem(StoreLocation store, Dog dog, int quant)
         {
             Item newItem = new Item(dog, quant);
             try{
+                Entity.Dog searchDog = (
+                                        from Dog in _context.Dogs where 
+                                        Dog.Breed == dog.Breed && Dog.Gender == dog.Gender.ToString()
+                                        select Dog
+                                        ).Single();
+                Entity.DogStore dS = (
+                                        from DogStore in _context.DogStores where 
+                                        DogStore.StoreAddress == store.Address && DogStore.StoreName == store.Location
+                                        select DogStore
+                                        ).Single();
+                
+                try{
+
+                    Entity.Inventory inv = (
+                                        from Inventory in _context.Inventories where
+                                        Inventory.StoreId == dS.Id && Inventory.DogId == searchDog.ItemId
+                                        select Inventory
+                                        ).Single();
+                    inv.Quantity += quant;
+                    _context.SaveChanges();
+                    return newItem;
+                }
+                catch(Exception e){
+                    Console.WriteLine(e.Message);
+                    Entity.Inventory inventory = new Entity.Inventory();
+                    inventory.DogId = searchDog.ItemId;
+                    inventory.Quantity = quant;
+                    inventory.StoreId = dS.Id;
+                    _context.Inventories.Add(inventory);
+                    _context.SaveChanges();
+                    return newItem;
+                }
+            }
+            catch (Exception e){
+                Console.WriteLine(e.Message);
+                Entity.Dog newDog = new Entity.Dog();
+                newDog.ItemId = new Random().Next();
+                newDog.Breed = dog.Breed;
+                newDog.Gender = dog.Gender.ToString();
+                _context.Dogs.Add(newDog);
+                _context.SaveChanges();
+                Entity.Dog searchDog = newDog;
+                Entity.DogStore dS = (
+                                        from DogStore in _context.DogStores where 
+                                        DogStore.StoreAddress == store.Address && DogStore.StoreName == store.Location
+                                        select DogStore
+                                        ).Single();
+                Entity.Inventory inventory = new Entity.Inventory();
+                    inventory.DogId = searchDog.ItemId;
+                    inventory.Quantity = quant;
+                    inventory.StoreId = dS.Id;
+                    _context.Inventories.Add(inventory);
+                    _context.SaveChanges();
+                    return newItem;
+            }
+            /*try{
             string add = FindStore(store.Address, store.Location).Address;
             string loc = FindStore(store.Address, store.Location).Location;
             GetStoreInventory(add, loc).First(item => item.Equals(newItem)).Quantity += quant;
@@ -96,7 +179,7 @@ namespace DSDL
                 GetAllStoreLocations().FirstOrDefault(stor => stor.Equals(store)).AddItem(newItem);
                 foreach(Item e in GetStoreInventory(add, loc)) Console.WriteLine(e.Dog.ToString());
                 return newItem;
-            }
+            }*/
         }
 
         /// <summary>
@@ -106,7 +189,7 @@ namespace DSDL
         /// <param name="address"> Address of the store you're looking for.</param>
         /// <param name="location"> Location name of the store you're looking for.</param>
         /// <returns></returns>
-        public StoreLocation FindStore(string address, string location){
+        public Model.StoreLocation FindStore(string address, string location){
             StoreLocation store = new StoreLocation(address, location);
             return GetAllStoreLocations().FirstOrDefault(stor => stor.Equals(store));
         }
@@ -116,7 +199,7 @@ namespace DSDL
         /// <param name="address"> Address of the store you want to remove.</param>
         /// <param name="location"> Name of the store you want to remove.</param>
         /// <returns> Store which was removed from memory.</returns>
-        public StoreLocation RemoveStore(string address, string location){
+        public Model.StoreLocation RemoveStore(string address, string location){
             //List<StoreLocation> storesFromFile = GetAllStoreLocations();
             StoreLocation store = FindStore(address, location);
             /*storesFromFile.Remove(store);
@@ -126,7 +209,7 @@ namespace DSDL
             return store;
         }
 
-        public Item FindItem(StoreLocation store, Dog dog, int quant)
+        public Model.Item FindItem(StoreLocation store, Dog dog, int quant)
         {
             Item newItem = new Item(dog, quant);
             try{
@@ -140,7 +223,7 @@ namespace DSDL
             }
         }
 
-        public Item UpdateItem(StoreLocation store, Dog dog, int quant)
+        public Model.Item UpdateItem(StoreLocation store, Dog dog, int quant)
         {
             try{
                 Item itemToBeInc = FindItem(store, dog, quant);
@@ -152,7 +235,7 @@ namespace DSDL
             }
         }
 
-        public DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl)
+        public Model.DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl)
         {
             DogOrder order = new DogOrder(buyer, total, sl);
             try{
