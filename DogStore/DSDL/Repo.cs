@@ -149,6 +149,7 @@ namespace DSDL
                 newDog.ItemId = new Random().Next();
                 newDog.Breed = dog.Breed;
                 newDog.Gender = dog.Gender.ToString();
+                newDog.Price = dog.Price;
                 _context.Dogs.Add(newDog);
                 _context.SaveChanges();
                 Entity.Dog searchDog = newDog;
