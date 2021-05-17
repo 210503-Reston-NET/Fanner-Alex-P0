@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using DSDL;
 using DSModels;
-
+using Entity = DSDL.Entities;
 namespace DSBL
 {
     /// <summary>
@@ -9,7 +9,10 @@ namespace DSBL
     /// </summary>
     public class StoreLocationBL:IStoreLocationBL
     {
-        private Repo _repoDS = new Repo();
+        private Repo _repoDS;
+        public StoreLocationBL(Entity.FannerDogsDBContext context ){
+            _repoDS =  new Repo(context);
+        }
         /// <summary>
         /// Method which accesses the data layer to get all stores in memory.
         /// </summary>

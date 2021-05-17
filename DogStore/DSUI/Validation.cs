@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System;
 namespace DSUI
@@ -74,6 +75,52 @@ namespace DSUI
                 }
             }while(repeat);
             return entererdString;
+        }
+        public string ValidateName(string message)
+        {
+            //@"^[\w\s]+,\s\w{2}$"
+            string enteredString = "";
+            bool repeat = true;
+            do{
+                Console.WriteLine(message);
+                try{
+                    enteredString = Console.ReadLine();
+                    if(Regex.IsMatch(enteredString, @"^[a-zA-Z]{2,}\s[a-zA-Z]{1,}$")){
+                        repeat = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Incorrect Format, use Firstname Lastname");
+                    }
+                }catch(Exception e){
+                    Console.WriteLine("Not a valid input, please try again");
+                }
+            }while(repeat);
+            return enteredString;
+        }
+
+        public long ValidatePhone(string message)
+        {
+            long phoneNumber = 0;
+            string enteredString;
+            bool repeat = true;
+            do{
+                Console.WriteLine(message);
+                try{
+                    enteredString = Console.ReadLine();
+                    if(Regex.IsMatch(enteredString, @"^[0-9]{10}$")){
+                        repeat = false;
+                        phoneNumber = Int64.Parse(enteredString);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Incorrect Format, use 1234567890");
+                    }
+                }catch(Exception e){
+                    Console.WriteLine("Not a valid input, please try again");
+                }
+            }while(repeat);
+            return phoneNumber;
         }
     }
 }

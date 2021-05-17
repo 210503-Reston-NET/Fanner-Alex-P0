@@ -6,5 +6,6 @@ namespace DSUI
         int ValidateInt(string message);
         double ValidateDouble(string message);
         string ValidateAddress(string message);
+        long ValidatePhone(string message);
     }
 }

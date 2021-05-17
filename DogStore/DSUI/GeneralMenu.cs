@@ -1,3 +1,4 @@
+using System.IO;
 using System;
 using DSBL;
 using DSModels;
@@ -6,9 +7,12 @@ namespace DSUI
     public class GeneralMenu : IMenu
     {
         private IStoreLocationBL _storeLoBL;
-        public GeneralMenu( IStoreLocationBL StoreLoBL){
+        private IBuyerBL _buyerBL;
+        private IOrderBL _orderBL;
+        public GeneralMenu( IStoreLocationBL StoreLoBL, IBuyerBL buyerBL, IOrderBL orderBL){
             this._storeLoBL = StoreLoBL;
-            
+            this._buyerBL = buyerBL;
+            this._orderBL = orderBL;
         }
         public void OnStart()
         {
@@ -43,11 +47,11 @@ namespace DSUI
                         StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
                         break;
                     case "a":
-                        IMenu _custMenu = new CustomerMenu(_storeLoBL, new DogBuyerBL(),new OrderBL());
+                        IMenu _custMenu = new CustomerMenu(_storeLoBL, _buyerBL,_orderBL);
                         _custMenu.OnStart();
                         break;
                     case "b":
-                        IMenu _managerMenu = new ManagerMenu(_storeLoBL, new OrderBL());
+                        IMenu _managerMenu = new ManagerMenu(_storeLoBL, _orderBL);
                         _managerMenu.OnStart();
                         break;
                     default:
