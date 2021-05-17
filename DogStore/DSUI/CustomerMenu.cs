@@ -14,6 +14,7 @@ namespace DSUI
         private double _runningCount;
         private IValidation validation = new Validation();
         private DogBuyer _dogBuyer;
+        private DogOrder _dogOrder;
         public CustomerMenu( IStoreLocationBL StoreLoBL, IBuyerBL BuyerBL, IOrderBL OBL){
             this._storeLoBL = StoreLoBL;
             this._buyerBL = BuyerBL;
@@ -70,30 +71,21 @@ namespace DSUI
 
         private void AddCustomer()
         {
-            Console.WriteLine("What's your name?");
-            string input = Console.ReadLine();
-            DogBuyer buyer = new DogBuyer("a","b",1000);
-            buyer.Name = input;
-            Console.WriteLine(input + buyer.Name);
-            _buyerBL.AddBuyer(buyer);
-            Console.WriteLine("Thank you " + buyer.Name + ". Feel free to look around.");
+            long phone = validation.ValidatePhone("Hello, please enter your phone number in the format 1234567890");
+            _dogBuyer = _buyerBL.FindUser(phone);
+            if(_dogBuyer == null){
+                string name = validation.ValidateName("Please enter your name in the format Firstname Lastname");
+                string address = validation.ValidateAddress("Please enter your address in the format CityName, ST");
+                _dogBuyer = new DogBuyer(name, address, phone);
+                _buyerBL.AddBuyer(_dogBuyer);
+            }else{
+                Console.WriteLine("User is already in database.");
+            }
         }
 
         private void OrderDog()
         {
-            Console.WriteLine("Are you an existing user?");
-            Console.WriteLine("[yes] or [no]");
-            string input = Console.ReadLine();
-            switch(input){
-                case "yes":
-                    break;
-                case "no":
-                    AddCustomer();
-                    break;
-                default:
-                    Console.WriteLine("Invalid input");
-                    return;
-            }
+            string input;
             bool repeat = true;
             do{
                 Console.WriteLine("What store would you like to buy from?");
@@ -140,31 +132,32 @@ namespace DSUI
             ViewStoreInv();
             repeat = true;
             _runningCount = 0;
+            string storeLocation = validation.ValidateString("Enter the store's name:");
+            string storeAddress = validation.ValidateAddress("Enter the store's address in format CityName, ST");
+            _dogOrder = new DogOrder(_dogBuyer,0,new StoreLocation(storeAddress,storeLocation));
             do{
-                Console.WriteLine("Enter the address of the store");
-                _address = Console.ReadLine();
-                Console.WriteLine("Enter the location name of the store");
-                _location = Console.ReadLine();
-                Console.WriteLine("Enter the gender of dog you'd like to purchase");
-                char[] gender = Console.ReadLine().ToCharArray();
-                Console.WriteLine("Enter the breed of the Dog you'd like to purchase");
-                string breed = Console.ReadLine();
-                Console.WriteLine("Enter how many you would like to purchase");
-                int quant = int.Parse(Console.ReadLine());
-                //get dog by id
-                _storeLoBL.FindItem(new StoreLocation(_address, _location), new Dog(breed, gender[0], 1000.0), quant);
-                //
+                
+                char gender = validation.ValidateGender("Enter the gender of dog you'd like to purchase");
+                string breed = validation.ValidateString("Enter the breed of the Dog you'd like to purchase");
+                int quant = validation.ValidateInt("Enter how many you would like to purchase");
+                Item lineItem = _storeLoBL.FindItem(new StoreLocation(_address, _location), new Dog(breed, gender, 1000.0), quant);
+                if(lineItem != null) {
+                    _dogOrder.AddItemToOrder(lineItem);
+                    _dogOrder.Total += ((double)quant * lineItem.Dog.Price);
+                    }
+                Console.WriteLine("Enter c to complete order or any other character to continue");
+                if(Console.ReadLine().Equals("c")) repeat = false;
+                //get all the items you want to order
             }while(repeat);
+            //send the list of items to the database and remove them from the store's inventory
         }
 
         private void ViewStoreInv()
         {
             bool repeat = true;
             do{
-                Console.WriteLine("Enter the address of the store");
-                _address = Console.ReadLine();
-                Console.WriteLine("Enter the location name of the store");
-                _location = Console.ReadLine();
+                _location = validation.ValidateString("Enter the store's name:");
+                _address = validation.ValidateAddress("Enter the store's address in format CityName, ST");
                 try{
                     foreach(Item i in _storeLoBL.GetStoreInventory(_address,_location)){
                         Console.WriteLine(i.ToString());

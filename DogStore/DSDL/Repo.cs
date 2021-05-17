@@ -225,15 +225,36 @@ namespace DSDL
 
         public Model.Item FindItem(StoreLocation store, Dog dog, int quant)
         {
-            Item newItem = new Item(dog, quant);
+            //Item newItem = new Item(dog, quant);
             try{
-            string add = FindStore(store.Address, store.Location).Address;
-            string loc = FindStore(store.Address, store.Location).Location;
-            return GetStoreInventory(add, loc).First(item => item.Equals(newItem));
+                string add = FindStore(store.Address, store.Location).Address;
+                string loc = FindStore(store.Address, store.Location).Location;
+                Entity.Dog searchDog = (
+                                        from Dog in _context.Dogs where 
+                                        Dog.Breed == dog.Breed && Dog.Gender == dog.Gender.ToString()
+                                        select Dog
+                                        ).Single();
+                Entity.DogStore dS = (
+                                        from DogStore in _context.DogStores where 
+                                        DogStore.StoreAddress == store.Address && DogStore.StoreName == store.Location
+                                        select DogStore
+                                        ).Single();
+                Entity.Inventory inv = (
+                                        from Inventory in _context.Inventories where
+                                        Inventory.StoreId == dS.Id && Inventory.DogId == searchDog.ItemId
+                                        select Inventory
+                                        ).Single();
+                if(inv.Quantity<quant) {
+                    Console.WriteLine("Store doesn't have that many of that dog!");
+                    throw new Exception();
+                }
+                else {
+                    return new Model.Item(new Dog(searchDog.Breed,searchDog.Gender.ToCharArray()[0],searchDog.Price,searchDog.ItemId),quant);
+                }
             }
             catch(Exception){
                 Console.WriteLine("Item not found");
-                return new Item(dog, quant);
+                return null;
             }
         }
 

@@ -6,7 +6,7 @@ namespace DSModels
     /// </summary>
     public class Dog
     {
-        private int id;
+        private long id;
         /// <summary>
         /// Simple constructor for the Dog Class with basic information.
         /// </summary>
@@ -18,7 +18,7 @@ namespace DSModels
             this.Gender = gender;
             this.Price = price;
         }
-        public Dog(string breed, char gender, double price, int id): this(breed, gender, price){
+        public Dog(string breed, char gender, double price, long id): this(breed, gender, price){
             this.id = id;
         }
         /// <summary>
