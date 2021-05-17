@@ -53,21 +53,20 @@ namespace DSUI
             }while(repeat);
         }
         private void StockShelves(){    
-            Console.WriteLine("Enter the store's address:");
-            _address = Console.ReadLine();    
-            Console.WriteLine("Enter the name of the store you're stocking:");
-            _location = Console.ReadLine();
+            _location = validation.ValidateString("Enter the store's name:");
+            _address = validation.ValidateAddress("Enter the store's address in format CityName, ST");
             try{
                 _store = _storeLoBL.GetStore(_address,_location);
+                if(_store == null){
+                    Console.WriteLine("Store Not Found, please add the store");
+                    return;
+                }
                 //_storeLoBL.RemoveStore(_address,_location);
-                Console.WriteLine("Enter breed of the dog");
-                string breed = Console.ReadLine();
-                Console.WriteLine("Enter gender of the dog");
-                char[] gender = Console.ReadLine().ToCharArray();
-                Console.WriteLine("Enter price of dog");
-                Dog dog = new Dog(breed, gender[0], double.Parse(Console.ReadLine()));
-                Console.WriteLine("How many?");
-                int quant = int.Parse(Console.ReadLine());
+                string breed = validation.ValidateString("Enter breed of the dog");
+                char gender = validation.ValidateGender("Enter gender of the dog either m or f");
+                double price = validation.ValidateDouble("Enter price of the dog in the form dollars.cents");
+                Dog dog = new Dog(breed, gender, price);
+                int quant = validation.ValidateInt("How many? Just enter a number");
                 
                 Console.WriteLine(_store.ToString());
                 _storeLoBL.AddItem(_store, dog, quant);

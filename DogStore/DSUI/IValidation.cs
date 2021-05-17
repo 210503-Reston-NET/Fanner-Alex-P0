@@ -8,5 +8,6 @@ namespace DSUI
         string ValidateAddress(string message);
         long ValidatePhone(string message);
         string ValidateName(string message);
+        char ValidateGender(string message);
     }
 }

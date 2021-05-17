@@ -54,7 +54,26 @@ namespace DSUI
 
         public int ValidateInt(string message)
         {
-            throw new System.NotImplementedException();
+            int enteredInt = 0;
+            bool repeat = true;
+            do{
+                Console.WriteLine(message);
+                try{
+                    enteredInt = Int32.Parse(Console.ReadLine());
+                    if (enteredInt > 0)
+                    {
+                        repeat = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Must be positive");
+                    }
+                }catch(Exception e){
+                    Console.WriteLine("Not a valid input, please try again");
+                }
+
+            }while(repeat);
+            return enteredInt;
         }
 
         public string ValidateString(string message)
@@ -121,6 +140,29 @@ namespace DSUI
                 }
             }while(repeat);
             return phoneNumber;
+        }
+        public char ValidateGender(string message)
+        {
+            char gender = 'm';
+            string enteredString;
+            bool repeat = true;
+            do{
+                Console.WriteLine(message);
+                try{
+                    enteredString = Console.ReadLine();
+                    if((enteredString.ToCharArray()[0] == 'm')||(enteredString.ToCharArray()[0] == 'f')){
+                        repeat = false;
+                        gender = enteredString.ToCharArray()[0];
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please enter either m or f");
+                    }
+                }catch(Exception e){
+                    Console.WriteLine("Not a valid input, please try again");
+                }
+            }while(repeat);
+            return gender;
         }
     }
 }

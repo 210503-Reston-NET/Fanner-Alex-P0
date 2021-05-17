@@ -203,8 +203,9 @@ namespace DSDL
         /// <param name="location"> Location name of the store you're looking for.</param>
         /// <returns></returns>
         public Model.StoreLocation FindStore(string address, string location){
-            StoreLocation store = new StoreLocation(address, location);
-            return GetAllStoreLocations().FirstOrDefault(stor => stor.Equals(store));
+            //StoreLocation store = new StoreLocation(address, location);
+            return GetAllStoreLocations().First(stor => stor.Address == address && stor.Location == location);
+            //from DogStore in _context.DogStores where 
         }
         /// <summary>
         /// Finds a store you're looking for and removes it from the JSON file.
