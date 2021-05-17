@@ -164,5 +164,27 @@ namespace DSUI
             }while(repeat);
             return gender;
         }
+
+        public int ValidateOrderSearchOptions(string message)
+        {
+            int enteredInt = 0;
+            bool repeat = true;
+            do{
+                Console.WriteLine(message);
+                try{
+                    Console.WriteLine("[1] to sort by Date (Oldest to Newest)");
+                    Console.WriteLine("[2] to sort by Date (Newest to Oldest)");
+                    Console.WriteLine("[3] to sort by Cost (Least to Most Expensive)");
+                    Console.WriteLine("[4] to sort by Cost (Most to Least Expensive)");
+                    enteredInt = Int32.Parse(Console.ReadLine());
+                    if(enteredInt==1||enteredInt==2||enteredInt==3||enteredInt==4) repeat = false;
+                    else Console.WriteLine("Not a valid number, try again");
+                }catch(Exception e){
+                    Console.WriteLine("Not a valid input, please try again");
+                }
+
+            }while(repeat);
+            return enteredInt;
+        }
     }
 }

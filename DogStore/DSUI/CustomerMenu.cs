@@ -56,6 +56,11 @@ namespace DSUI
                     case "3":
                         AddCustomer();
                         break;
+                    case "4":
+                        break;
+                    case "5":
+                        ViewOrders();
+                        break;
                     case "7":
                         //StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
                         break;
@@ -67,6 +72,12 @@ namespace DSUI
                         break;
                 }
             }while(repeat);
+        }
+
+        private void ViewOrders()
+        {
+            int orderOption = validation.ValidateOrderSearchOptions("Choose an option from the list!");
+            foreach (DogOrder dogOrder in _orBL.FindUserOrders(_dogBuyer.PhoneNumber, orderOption)) Console.WriteLine(dogOrder.ToString());
         }
 
         private void AddCustomer()

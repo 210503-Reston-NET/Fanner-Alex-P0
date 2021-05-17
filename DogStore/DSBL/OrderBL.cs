@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DSDL;
 using DSModels;
 using Entity = DSDL.Entities;
@@ -13,6 +14,11 @@ namespace DSBL
         public DogOrder AddOrder(DogOrder dogOrder)
         {
             return _repoDS.AddOrder(dogOrder);
+        }
+
+        public List<DogOrder> FindUserOrders(long phoneNumber, int option)
+        {
+            return _repoDS.FindUserOrders(phoneNumber, option);
         }
     }
 }

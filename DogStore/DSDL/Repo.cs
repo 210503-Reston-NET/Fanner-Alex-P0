@@ -107,13 +107,26 @@ namespace DSDL
                                         DogStore.StoreAddress == address && DogStore.StoreName == location
                                         select DogStore
                                         ).Single();
-                List<Entity.Inventory> iList = dS.Inventories.ToList();
+                List<Entity.Inventory> iList = (
+                                        from Inventory in _context.Inventories where
+                                        Inventory.StoreId == dS.Id
+                                        select Inventory
+                                        ).ToList();
                 List<Model.Item> itemList = new List<Model.Item>();
                 foreach(Entity.Inventory i in iList){
-                    itemList.Add(new Model.Item(new Model.Dog(i.Dog.Breed,i.Dog.Gender.ToCharArray()[0], i.Dog.Price),i.Quantity.Value));
+                    Entity.Dog dog = (
+                                        from Dog in _context.Dogs where
+                                        Dog.ItemId == i.DogId
+                                        select Dog
+                    ).Single();
+                    Console.WriteLine(dog.Breed);
+                    Console.WriteLine(dog.Gender.ToCharArray()[0].ToString());
+                    Console.WriteLine(dog.Price.ToString());
+                    itemList.Add(new Model.Item(new Model.Dog(dog.Breed,dog.Gender.ToCharArray()[0], dog.Price),i.Quantity.Value));
                 }
                 return itemList;
-            } catch(Exception){
+            } catch(Exception e){
+            //    Console.WriteLine(e.Message);
                 return new List<Model.Item>();
             }
         }
@@ -373,6 +386,102 @@ namespace DSDL
                 Console.WriteLine(e.Message);
                 return null;
             }
+        }
+
+        public List<Model.DogOrder> FindUserOrders(long phoneNumber, int option)
+        {
+            Model.DogBuyer dogBuyer = FindBuyer(phoneNumber);
+            List<Entity.DogOrder> dogOrders = new List<Entity.DogOrder>();
+            switch(option){
+            case 1:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.BuyerId == phoneNumber
+                                            orderby DogOrder.DateOrder ascending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            case 2:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.BuyerId == phoneNumber
+                                            orderby DogOrder.DateOrder descending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            case 3:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.BuyerId == phoneNumber
+                                            orderby DogOrder.Total ascending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            case 4:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.BuyerId == phoneNumber
+                                            orderby DogOrder.Total descending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            default:
+                return null;
+            }
+            Entity.DogStore dogStore;
+            List<Entity.OrderItem> orderItems;
+            List<Model.DogOrder> returnOrders = new List<Model.DogOrder>();
+            Model.StoreLocation storeLocation;
+            Model.DogOrder returnOrder;
+            Entity.Dog dog;
+            foreach(Entity.DogOrder dogOrder in dogOrders){
+                /*Entity.Dog dog = (
+                                        from Dog in _context.Dogs where
+                                        Dog.ItemId == i.DogId
+                                        select Dog
+                    ).Single();
+                    Console.WriteLine(dog.Breed);
+                    Console.WriteLine(dog.Gender.ToCharArray()[0].ToString());
+                    Console.WriteLine(dog.Price.ToString());
+                    itemList.Add(new Model.Item(new Model.Dog(dog.Breed,dog.Gender.ToCharArray()[0], dog.Price),i.Quantity.Value));*/
+                dogStore = (
+                            from DogStore in _context.DogStores where
+                            DogStore.Id == dogOrder.StoreId
+                            select DogStore
+                            ).Single();
+                orderItems = (
+                            from OrderItem in _context.OrderItems where
+                            OrderItem.OrderId == dogOrder.Id
+                            select OrderItem
+                            ).ToList();
+                returnOrder = new DogOrder(
+                    dogBuyer,
+                    dogOrder.Total,
+                    new Model.StoreLocation(
+                        dogStore.Id,
+                        dogStore.StoreAddress,
+                        dogStore.StoreName
+                    )
+                );
+                returnOrder.OrderDate = dogOrder.DateOrder;
+                foreach(Entity.OrderItem orderItem in orderItems){
+                    dog = (
+                            from Dog in _context.Dogs where
+                            Dog.ItemId == orderItem.DogId
+                            select Dog
+                    ).Single();
+                    returnOrder.AddItemToOrder(new Model.Item(
+                        new Model.Dog(
+                            dog.Breed,
+                            dog.Gender.ToCharArray()[0],
+                            dog.Price
+                        ),
+                        orderItem.Quantity.Value
+                    ));
+                }
+                returnOrders.Add(returnOrder);
+            }
+            return returnOrders;
         }
     }
 }

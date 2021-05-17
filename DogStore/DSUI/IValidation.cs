@@ -9,5 +9,6 @@ namespace DSUI
         long ValidatePhone(string message);
         string ValidateName(string message);
         char ValidateGender(string message);
+        int ValidateOrderSearchOptions(string message);
     }
 }

@@ -42,5 +42,17 @@ namespace DSModels
         public List<Item> GetItems(){
             return _itemsInOrder;
         }
+        public override string ToString()
+        {
+            string s = this.DogBuyer + " ordered from "
+            + this.StoreLocation + " at the following time " +
+            this.OrderDate.ToString() + ". The total was "
+            + this.Total.ToString();
+            s += " The following items were ordered: ";
+            foreach(Item item in this.GetItems()){
+                s += item.ToString() + " ";
+            }
+            return s;
+        }
     }
 }
