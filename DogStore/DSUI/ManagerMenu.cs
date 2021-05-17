@@ -7,12 +7,14 @@ namespace DSUI
     public class ManagerMenu : IMenu
     {
         private IStoreLocationBL _storeLoBL;
-        private IManagerBL _managerBL;
+        
         private string _location;
         private string _address;
         private StoreLocation _store;
         private IOrderBL _orBL;
         private IManagerBL _mBL;
+        private IValidation validation = new Validation();
+        private DogManager _dogManager;
         public ManagerMenu( IStoreLocationBL StoreLoBL,IOrderBL OBL, IManagerBL MBL){
             this._storeLoBL = StoreLoBL;
             this._orBL = OBL;
@@ -20,6 +22,14 @@ namespace DSUI
         }
         public void OnStart()
         {
+            long phone = validation.ValidatePhone("Hello, please enter your phone number in the format 1234567890");
+            _dogManager = _mBL.FindManager(phone);
+            if(_dogManager == null){
+                string name = validation.ValidateName("Please enter your name in the format Firstname Lastname");
+                string address = validation.ValidateAddress("Please enter your address in the format CityName, ST");
+                _dogManager = new DogManager(phone, address, name);
+                _mBL.AddManager(_dogManager);
+            }
             bool repeat = true;
             do{
                 Console.WriteLine("Welcome manager, please select an option from the list:");
@@ -28,12 +38,10 @@ namespace DSUI
                 string input = Console.ReadLine();
                 switch(input){
                     case "0":
-                        Console.WriteLine("Enter the store's name:");
-                        _location = Console.ReadLine();
-                        Console.WriteLine("Enter the store's address:");
-                        _address = Console.ReadLine();
+                        _location = validation.ValidateString("Enter the store's name:");
+                        _address = validation.ValidateAddress("Enter the store's address in format CityName, ST");
                         StoreLocation store = new StoreLocation(_address,_location);
-                        _storeLoBL.AddStoreLocation(store);
+                        _storeLoBL.AddStoreLocation(store,_dogManager);
                         break;
                     case "1":
                         StockShelves();
@@ -63,7 +71,7 @@ namespace DSUI
                 
                 Console.WriteLine(_store.ToString());
                 _storeLoBL.AddItem(_store, dog, quant);
-                _storeLoBL.AddStoreLocation(_store);
+                //_storeLoBL.AddStoreLocation(_store);
                 Console.WriteLine("Thanks!");
             }catch(Exception e){
                 Console.WriteLine("Error while stocking");

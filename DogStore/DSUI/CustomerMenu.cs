@@ -56,7 +56,7 @@ namespace DSUI
                         AddCustomer();
                         break;
                     case "7":
-                        StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
+                        //StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
                         break;
                     case "a":
 

@@ -31,7 +31,7 @@ namespace DSDL
         /// </summary>
         /// <param name="store">StoreLocation to add to memory</param>
         // <returns>Return added StoreLocation</returns>
-        public Model.StoreLocation AddStoreLocation(Model.StoreLocation store)
+        public Model.StoreLocation AddStoreLocation(Model.StoreLocation store, Model.DogManager dogManager)
         {
             /*List<StoreLocation> storesFromFile = GetAllStoreLocations();
             storesFromFile.Add(store);
@@ -49,10 +49,21 @@ namespace DSDL
                 _context.DogStores.Add(
                     dogStore
                 );
+                Entity.ManagesStore managesStore = new Entity.ManagesStore();
+                
+                _context.SaveChanges();
+                Entity.DogStore dS = (
+                                        from DogStore in _context.DogStores where 
+                                        DogStore.StoreAddress == dogStore.StoreAddress && DogStore.StoreName == dogStore.StoreName
+                                        select DogStore
+                                        ).Single();
+                managesStore.ManagerId = dogManager.PhoneNumber;
+                managesStore.StoreId = dS.Id;
+                _context.ManagesStores.Add(managesStore);
                 _context.SaveChanges();
             }
             catch(Exception ex){
-               Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message);
             }
             return store;
         }
@@ -277,20 +288,26 @@ namespace DSDL
         public DogManager FindManager(long phoneNumber)
         {
             try{
-                Entity.DogBuyer dogBuyer = (
-                                            from DogBuyer in _context.DogBuyers where 
-                                            DogBuyer.PhoneNumber == phoneNumber
-                                            select DogBuyer
+                Entity.DogManager dogManager = (
+                                            from DogManager in _context.DogManagers where 
+                                            DogManager.PhoneNumber == phoneNumber
+                                            select DogManager
                                             ).Single();
-                return null;// new Model.DogBuyer(dogBuyer.UserName, dogBuyer.UserAddress,dogBuyer.PhoneNumber);
+                return new Model.DogManager(dogManager.PhoneNumber,dogManager.UserAddress,dogManager.UserName);
             }catch(Exception e){
                 return null;
             }
         }
 
-        public DogManager AddManager(DogBuyer buyer)
+        public DogManager AddManager(DogManager manager)
         {
-            throw new NotImplementedException();
+            Entity.DogManager dogManager = new Entity.DogManager();
+                    dogManager.UserName = manager.Name;
+                    dogManager.PhoneNumber = manager.PhoneNumber;
+                    dogManager.UserAddress = manager.Address;
+                    _context.DogManagers.Add(dogManager);
+                    _context.SaveChanges();
+                    return manager;
         }
     }
 }

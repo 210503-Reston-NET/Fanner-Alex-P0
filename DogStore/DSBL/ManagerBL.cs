@@ -19,7 +19,7 @@ namespace DSBL
 
         public DogManager AddManager(DogManager user)
         {
-            throw new System.NotImplementedException();
+            return _repoDS.AddManager(user);
         }
 
         public DogManager FindManager(long phone)

@@ -25,8 +25,8 @@ namespace DSBL
         /// </summary>
         /// <param name="store"> Store to add to the database through the data layer.</param>
         /// <returns> Store location which was added.</returns>
-        public StoreLocation AddStoreLocation(StoreLocation store){
-            return _repoDS.AddStoreLocation(store);
+        public StoreLocation AddStoreLocation(StoreLocation store, DogManager dogManager){
+            return _repoDS.AddStoreLocation(store,dogManager);
         }
         /// <summary>
         /// Method which returns an inventory given a store address and location, 

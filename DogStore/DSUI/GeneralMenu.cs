@@ -46,7 +46,7 @@ namespace DSUI
                         OrderDog();
                         break;
                     case "7":
-                        StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
+                        //StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
                         break;
                     case "a":
                         IMenu _custMenu = new CustomerMenu(_storeLoBL, _buyerBL,_orderBL);
