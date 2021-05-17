@@ -9,10 +9,12 @@ namespace DSUI
         private IStoreLocationBL _storeLoBL;
         private IBuyerBL _buyerBL;
         private IOrderBL _orderBL;
-        public GeneralMenu( IStoreLocationBL StoreLoBL, IBuyerBL buyerBL, IOrderBL orderBL){
+        private IManagerBL _managerBL;
+        public GeneralMenu( IStoreLocationBL StoreLoBL, IBuyerBL buyerBL, IOrderBL orderBL, IManagerBL managerBL){
             this._storeLoBL = StoreLoBL;
             this._buyerBL = buyerBL;
             this._orderBL = orderBL;
+            this._managerBL = managerBL;
         }
         public void OnStart()
         {
@@ -51,7 +53,7 @@ namespace DSUI
                         _custMenu.OnStart();
                         break;
                     case "b":
-                        IMenu _managerMenu = new ManagerMenu(_storeLoBL, _orderBL);
+                        IMenu _managerMenu = new ManagerMenu(_storeLoBL, _orderBL, _managerBL);
                         _managerMenu.OnStart();
                         break;
                     default:

@@ -5,6 +5,9 @@ namespace DSBL
     public interface IManagerBL
     {
         List<Item> GetAllItems();
-        DogBuyer AddItem(Item item);
+        Item AddItem(Item item);
+        List<DogManager> GetAllManagers();
+        DogManager AddManager(DogManager user);
+        DogManager FindManager(long phone);
     }
 }

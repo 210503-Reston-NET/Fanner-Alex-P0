@@ -9,7 +9,6 @@ namespace DSDL.Entities
     {
         public DogStore()
         {
-            DogManagers = new HashSet<DogManager>();
             DogOrders = new HashSet<DogOrder>();
             Inventories = new HashSet<Inventory>();
             ManagesStores = new HashSet<ManagesStore>();
@@ -19,7 +18,6 @@ namespace DSDL.Entities
         public string StoreAddress { get; set; }
         public string StoreName { get; set; }
 
-        public virtual ICollection<DogManager> DogManagers { get; set; }
         public virtual ICollection<DogOrder> DogOrders { get; set; }
         public virtual ICollection<Inventory> Inventories { get; set; }
         public virtual ICollection<ManagesStore> ManagesStores { get; set; }

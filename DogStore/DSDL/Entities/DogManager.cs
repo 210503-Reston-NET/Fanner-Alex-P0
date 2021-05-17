@@ -15,9 +15,7 @@ namespace DSDL.Entities
         public long PhoneNumber { get; set; }
         public string UserAddress { get; set; }
         public string UserName { get; set; }
-        public int StoreId { get; set; }
 
-        public virtual DogStore Store { get; set; }
         public virtual ICollection<ManagesStore> ManagesStores { get; set; }
     }
 }

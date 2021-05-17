@@ -4,8 +4,7 @@ using DSDL;
 using Entity = DSDL.Entities;
 namespace DSBL
 {
-    public class BuyerBL : IBuyerBL
-    {
+    public class BuyerBL : IBuyerBL{
         private Repo _repoDS;
         public BuyerBL(Entity.FannerDogsDBContext context ){
             _repoDS =  new Repo(context);

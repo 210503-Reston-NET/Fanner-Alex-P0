@@ -16,7 +16,7 @@ namespace DSUI
             DbContextOptions<FannerDogsDBContext> options = new DbContextOptionsBuilder<FannerDogsDBContext>()
             .UseSqlServer(connectionString).Options;
             var context = new FannerDogsDBContext(options);
-            IMenu menu = new GeneralMenu(new StoreLocationBL(context),new BuyerBL(context), new OrderBL(context));
+            IMenu menu = new GeneralMenu(new StoreLocationBL(context),new BuyerBL(context), new OrderBL(context), new ManagerBL(context));
             menu.OnStart();
         }
         

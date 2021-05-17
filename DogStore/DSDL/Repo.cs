@@ -30,7 +30,7 @@ namespace DSDL
         /// the added store.
         /// </summary>
         /// <param name="store">StoreLocation to add to memory</param>
-        /// <returns>Return added StoreLocation</returns>
+        // <returns>Return added StoreLocation</returns>
         public Model.StoreLocation AddStoreLocation(Model.StoreLocation store)
         {
             /*List<StoreLocation> storesFromFile = GetAllStoreLocations();
@@ -89,7 +89,7 @@ namespace DSDL
         /// <returns>List of items responding to the store's inventory.</returns>
         public List<Model.Item> GetStoreInventory(string address, string location)
         {
-            //StoreLocation sL = new StoreLocation(address, location);
+            StoreLocation sL = new StoreLocation(address, location);
             try{
                 Entity.DogStore dS = (
                                         from DogStore in _context.DogStores where 
@@ -202,7 +202,7 @@ namespace DSDL
         /// <param name="location"> Name of the store you want to remove.</param>
         /// <returns> Store which was removed from memory.</returns>
         public Model.StoreLocation RemoveStore(string address, string location){
-            //List<StoreLocation> storesFromFile = GetAllStoreLocations();
+            List<StoreLocation> storesFromFile = GetAllStoreLocations();
             StoreLocation store = FindStore(address, location);
             /*storesFromFile.Remove(store);
             jsonString = JsonSerializer.Serialize(storesFromFile);
@@ -272,6 +272,25 @@ namespace DSDL
                     _context.DogBuyers.Add(dogBuyer);
                     _context.SaveChanges();
                     return buyer;
+        }
+
+        public DogManager FindManager(long phoneNumber)
+        {
+            try{
+                Entity.DogBuyer dogBuyer = (
+                                            from DogBuyer in _context.DogBuyers where 
+                                            DogBuyer.PhoneNumber == phoneNumber
+                                            select DogBuyer
+                                            ).Single();
+                return null;// new Model.DogBuyer(dogBuyer.UserName, dogBuyer.UserAddress,dogBuyer.PhoneNumber);
+            }catch(Exception e){
+                return null;
+            }
+        }
+
+        public DogManager AddManager(DogBuyer buyer)
+        {
+            throw new NotImplementedException();
         }
     }
 }
