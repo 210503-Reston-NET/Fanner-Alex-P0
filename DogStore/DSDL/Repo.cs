@@ -1,3 +1,4 @@
+using System.Diagnostics;
 
 using System.Linq;
 using System.Collections.Generic;
@@ -246,6 +247,31 @@ namespace DSDL
                 _orders.Add(order);
             }
             return order;
+        }
+
+        public Model.DogBuyer FindBuyer(long phoneNumber)
+        {
+            try{
+                Entity.DogBuyer dogBuyer = (
+                                            from DogBuyer in _context.DogBuyers where 
+                                            DogBuyer.PhoneNumber == phoneNumber
+                                            select DogBuyer
+                                            ).Single();
+                return new Model.DogBuyer(dogBuyer.UserName, dogBuyer.UserAddress,dogBuyer.PhoneNumber);
+            }catch(Exception e){
+                return null;
+            }
+        }
+
+        public DogBuyer AddBuyer(DogBuyer buyer)
+        {
+            Entity.DogBuyer dogBuyer = new Entity.DogBuyer();
+                    dogBuyer.UserName = buyer.Name;
+                    dogBuyer.PhoneNumber = buyer.PhoneNumber;
+                    dogBuyer.UserAddress = buyer.Address;
+                    _context.DogBuyers.Add(dogBuyer);
+                    _context.SaveChanges();
+                    return buyer;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace DSUI
                     }
                     else
                     {
-                        Console.WriteLine("Incorrect Format, use Cityname,ST");
+                        Console.WriteLine("Incorrect Format, use Cityname, ST");
                     }
                 }catch(Exception e){
                     Console.WriteLine("Not a valid input, please try again");

@@ -1,5 +1,6 @@
 using DSModels;
 using System.Collections.Generic;
+using Entity = DSDL.Entities;
 namespace DSDL
 {
     public interface IRepo
@@ -13,5 +14,7 @@ namespace DSDL
 
         Item AddItem(StoreLocation store, Dog dog, int quant);
         DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl);
+        DogBuyer FindBuyer(long phoneNumber);
+        DogBuyer AddBuyer(DogBuyer buyer);
     }
 }

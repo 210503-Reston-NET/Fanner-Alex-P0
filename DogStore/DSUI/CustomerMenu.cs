@@ -12,6 +12,8 @@ namespace DSUI
         private string _location;
         private IOrderBL _orBL;
         private double _runningCount;
+        private IValidation validation = new Validation();
+        private DogBuyer _dogBuyer;
         public CustomerMenu( IStoreLocationBL StoreLoBL, IBuyerBL BuyerBL, IOrderBL OBL){
             this._storeLoBL = StoreLoBL;
             this._buyerBL = BuyerBL;
@@ -19,6 +21,14 @@ namespace DSUI
         }
         public void OnStart()
         {
+            long phone = validation.ValidatePhone("Hello, please enter your phone number in the format 1234567890");
+            _dogBuyer = _buyerBL.FindUser(phone);
+            if(_dogBuyer == null){
+                string name = validation.ValidateName("Please enter your name in the format Firstname Lastname");
+                string address = validation.ValidateAddress("Please enter your address in the format CityName, ST");
+                _dogBuyer = new DogBuyer(name, address, phone);
+                _buyerBL.AddBuyer(_dogBuyer);
+            }
             bool repeat = true;
             do{
                 Console.WriteLine("How can I Help you?");

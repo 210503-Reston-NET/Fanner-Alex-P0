@@ -12,7 +12,12 @@ namespace DSBL
         }
         public DogBuyer AddBuyer(DogBuyer user)
         {
-            throw new System.NotImplementedException();
+            return _repoDS.AddBuyer(user);
+        }
+
+        public DogBuyer FindUser(long phone)
+        {
+            return _repoDS.FindBuyer(phone);
         }
 
         public List<DogBuyer> GetAllBuyers()

@@ -6,5 +6,6 @@ namespace DSBL
     {
         List<DogBuyer> GetAllBuyers();
         DogBuyer AddBuyer(DogBuyer user);
+        DogBuyer FindUser(long phone);
     }
 }
