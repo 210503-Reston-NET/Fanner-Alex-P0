@@ -19,5 +19,6 @@ namespace DSDL
         DogManager FindManager(long phoneNumber);
         DogManager AddManager(DogManager buyer);
         List<DogOrder> FindUserOrders(long phoneNumber, int option);
+        List<DogOrder> FindStoreOrders(string address, string location, int option);
     }
 }

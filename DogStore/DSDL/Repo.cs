@@ -435,15 +435,6 @@ namespace DSDL
             Model.DogOrder returnOrder;
             Entity.Dog dog;
             foreach(Entity.DogOrder dogOrder in dogOrders){
-                /*Entity.Dog dog = (
-                                        from Dog in _context.Dogs where
-                                        Dog.ItemId == i.DogId
-                                        select Dog
-                    ).Single();
-                    Console.WriteLine(dog.Breed);
-                    Console.WriteLine(dog.Gender.ToCharArray()[0].ToString());
-                    Console.WriteLine(dog.Price.ToString());
-                    itemList.Add(new Model.Item(new Model.Dog(dog.Breed,dog.Gender.ToCharArray()[0], dog.Price),i.Quantity.Value));*/
                 dogStore = (
                             from DogStore in _context.DogStores where
                             DogStore.Id == dogOrder.StoreId
@@ -462,6 +453,84 @@ namespace DSDL
                         dogStore.StoreAddress,
                         dogStore.StoreName
                     )
+                );
+                returnOrder.OrderDate = dogOrder.DateOrder;
+                foreach(Entity.OrderItem orderItem in orderItems){
+                    dog = (
+                            from Dog in _context.Dogs where
+                            Dog.ItemId == orderItem.DogId
+                            select Dog
+                    ).Single();
+                    returnOrder.AddItemToOrder(new Model.Item(
+                        new Model.Dog(
+                            dog.Breed,
+                            dog.Gender.ToCharArray()[0],
+                            dog.Price
+                        ),
+                        orderItem.Quantity.Value
+                    ));
+                }
+                returnOrders.Add(returnOrder);
+            }
+            return returnOrders;
+        }
+
+        public List<DogOrder> FindStoreOrders(string address, string location, int option)
+        {
+            Model.StoreLocation store = FindStore(address,location);
+            List<Entity.DogOrder> dogOrders = new List<Entity.DogOrder>();
+            switch(option){
+            case 1:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.StoreId == store.id
+                                            orderby DogOrder.DateOrder ascending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            case 2:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.StoreId == store.id
+                                            orderby DogOrder.DateOrder descending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            case 3:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.StoreId == store.id
+                                            orderby DogOrder.Total ascending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            case 4:
+                dogOrders = (
+                                            from DogOrder in _context.DogOrders where
+                                            DogOrder.StoreId == store.id
+                                            orderby DogOrder.Total descending
+                                            select DogOrder
+                                            ).ToList();
+                break;
+            default:
+                return null;
+            }
+            Model.DogBuyer dogBuyer;
+            List<Entity.OrderItem> orderItems;
+            List<Model.DogOrder> returnOrders = new List<Model.DogOrder>();
+            Model.DogOrder returnOrder;
+            Entity.Dog dog;
+            foreach(Entity.DogOrder dogOrder in dogOrders){
+                dogBuyer = FindBuyer(dogOrder.BuyerId);
+                orderItems = (
+                            from OrderItem in _context.OrderItems where
+                            OrderItem.OrderId == dogOrder.Id
+                            select OrderItem
+                            ).ToList();
+                returnOrder = new DogOrder(
+                    dogBuyer,
+                    dogOrder.Total,
+                    store
                 );
                 returnOrder.OrderDate = dogOrder.DateOrder;
                 foreach(Entity.OrderItem orderItem in orderItems){

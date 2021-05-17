@@ -35,6 +35,8 @@ namespace DSUI
                 Console.WriteLine("Welcome manager, please select an option from the list:");
                 Console.WriteLine("[0] Add a store");
                 Console.WriteLine("[1] Stock some shelves");
+                Console.WriteLine("[2] View a store's inventory");
+                Console.WriteLine("[3] View a store's order history");
                 string input = Console.ReadLine();
                 switch(input){
                     case "0":
@@ -45,6 +47,12 @@ namespace DSUI
                         break;
                     case "1":
                         StockShelves();
+                        break;
+                    case "2":
+                        ViewStoreInv();
+                        break;
+                    case "3":
+                        ViewOrders();
                         break;
                     default:
                         repeat = false;
@@ -76,6 +84,33 @@ namespace DSUI
                 Console.WriteLine("Error while stocking");
             }
         
+        }
+        private void ViewStoreInv()
+        {
+            bool repeat = true;
+            do{
+                _location = validation.ValidateString("Enter the store's name:");
+                _address = validation.ValidateAddress("Enter the store's address in format CityName, ST");
+                try{
+                    foreach(Item i in _storeLoBL.GetStoreInventory(_address,_location)){
+                        Console.WriteLine(i.ToString());
+                    }
+                    repeat = false;
+                }
+                catch(Exception e){
+                    repeat = true;
+                    Console.WriteLine("That didn't work.");
+                    Console.WriteLine("Enter q to exit or any other character to continue");
+                    if(Console.ReadLine().Equals("q")) repeat = false;
+                }
+            } while(repeat);
+        }
+        private void ViewOrders()
+        {
+            _location = validation.ValidateString("Enter the store's name:");
+            _address = validation.ValidateAddress("Enter the store's address in format CityName, ST");
+            int orderOption = validation.ValidateOrderSearchOptions("Choose an option from the list!");
+            foreach (DogOrder dogOrder in _orBL.FindStoreOrders(_address,_location,orderOption)) Console.WriteLine(dogOrder.ToString());
         }
     }
 }

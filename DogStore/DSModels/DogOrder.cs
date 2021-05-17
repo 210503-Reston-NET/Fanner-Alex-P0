@@ -45,7 +45,7 @@ namespace DSModels
         public override string ToString()
         {
             string s = this.DogBuyer + " ordered from "
-            + this.StoreLocation + " at the following time " +
+            + this.StoreLocation + " at the following time: " +
             this.OrderDate.ToString() + ". The total was "
             + this.Total.ToString();
             s += " The following items were ordered: ";
