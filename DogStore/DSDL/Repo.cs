@@ -331,5 +331,48 @@ namespace DSDL
                     _context.SaveChanges();
                     return manager;
         }
+
+        public DogOrder AddOrder(DogOrder dogOrder)
+        {
+            try{
+                Entity.DogOrder dogOrd = new Entity.DogOrder();
+                dogOrd.BuyerId = dogOrder.DogBuyer.PhoneNumber;
+                dogOrd.StoreId = dogOrder.StoreLocation.id;
+                dogOrd.DateOrder = dogOrder.OrderDate;
+                dogOrd.Total = dogOrder.Total;
+                _context.DogOrders.Add(dogOrd);
+                _context.SaveChanges();
+                Entity.OrderItem orderItem;
+                dogOrd  = (
+                            from DogOrder in _context.DogOrders where
+                            DogOrder.BuyerId == dogOrder.DogBuyer.PhoneNumber &&
+                            DogOrder.StoreId == dogOrder.StoreLocation.id &&
+                            DogOrder.DateOrder == dogOrder.OrderDate &&
+                            DogOrder.Total == dogOrder.Total
+                            select DogOrder
+                ).Single();
+                foreach(Model.Item item in dogOrder.GetItems()){
+                    Entity.Inventory inv = (
+                                            from Inventory in _context.Inventories where
+                                            Inventory.StoreId == dogOrder.StoreLocation.id && Inventory.DogId == item.Dog.id
+                                            select Inventory
+                                            ).Single();
+                    inv.Quantity -= item.Quantity;
+                    _context.SaveChanges();
+                    orderItem = new Entity.OrderItem();
+                    orderItem.DogId = item.Dog.id;
+                    orderItem.OrderId = dogOrd.Id;
+                    orderItem.Quantity = item.Quantity;
+                    _context.OrderItems.Add(orderItem);
+                    _context.SaveChanges();
+                }
+                return dogOrder;
+            }
+            catch(Exception e){
+                Console.WriteLine("Something went wrong :(");
+                Console.WriteLine(e.Message);
+                return null;
+            }
+        }
     }
 }

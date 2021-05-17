@@ -134,7 +134,7 @@ namespace DSUI
             _runningCount = 0;
             string storeLocation = validation.ValidateString("Enter the store's name:");
             string storeAddress = validation.ValidateAddress("Enter the store's address in format CityName, ST");
-            _dogOrder = new DogOrder(_dogBuyer,0,new StoreLocation(storeAddress,storeLocation));
+            _dogOrder = new DogOrder(_dogBuyer,0,_storeLoBL.GetStore(storeAddress,storeLocation));
             do{
                 
                 char gender = validation.ValidateGender("Enter the gender of dog you'd like to purchase");
@@ -149,6 +149,7 @@ namespace DSUI
                 if(Console.ReadLine().Equals("c")) repeat = false;
                 //get all the items you want to order
             }while(repeat);
+            if(_orBL.AddOrder(_dogOrder)==null) Console.WriteLine("If you're seeing this, something went terribly wrong");
             //send the list of items to the database and remove them from the store's inventory
         }
 
@@ -170,7 +171,7 @@ namespace DSUI
                     Console.WriteLine("Enter q to exit or any other character to continue");
                     if(Console.ReadLine().Equals("q")) repeat = false;
                 }
-            }while(repeat);
+            } while(repeat);
         }
 
         private List<StoreLocation> ViewStoreList()

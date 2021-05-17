@@ -14,7 +14,7 @@ namespace DSModels
         /// <summary>
         /// id for db structure
         /// </summary>
-        private int id;
+        //private int id;
         /// <summary>
         /// Basic constructor with address and location.
         /// </summary>
@@ -29,6 +29,7 @@ namespace DSModels
         public StoreLocation(int id, string address, string location): this(address, location){
             this.id = id;
         }
+        public int id{get;set;}
         /// <summary>
         /// String representing the address of the store.
         /// </summary>

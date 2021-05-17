@@ -9,18 +9,17 @@ namespace DSModels
     {
         private List<Item> _itemsInOrder;
         private int id;
-        private DateTime _dateTime;
         public DogOrder(DogBuyer buyer, double tot, StoreLocation sl){
             this.DogBuyer = buyer;
             this.StoreLocation = sl;
             this.Total = tot;
             _itemsInOrder = new List<Item>();
-            _dateTime = DateTime.Now;
+            this.OrderDate = DateTime.Now;
         }
         public DogOrder(DogBuyer buyer, double tot, StoreLocation sl, int id): this(buyer, tot, sl){
             this.id = id;
         }
-
+        public DateTime OrderDate{get;set;}
         /// <summary>
         /// Customer ordering the dogs, represented by DogBuyer.
         /// </summary>

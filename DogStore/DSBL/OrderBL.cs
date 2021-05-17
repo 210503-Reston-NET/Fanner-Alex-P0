@@ -10,9 +10,9 @@ namespace DSBL
         public OrderBL(Entity.FannerDogsDBContext context ){
             _repoDS =  new Repo(context);
         }
-        public DogOrder AddOrder(DogBuyer buyer, double tot, StoreLocation sl)
+        public DogOrder AddOrder(DogOrder dogOrder)
         {
-            return _repoDS.AddOrder(buyer, tot, sl);
+            return _repoDS.AddOrder(dogOrder);
         }
     }
 }

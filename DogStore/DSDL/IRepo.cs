@@ -13,7 +13,7 @@ namespace DSDL
         Item UpdateItem(StoreLocation store, Dog dog, int quant);
 
         Item AddItem(StoreLocation store, Dog dog, int quant);
-        DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl);
+        DogOrder AddOrder(DogOrder dogOrder);
         DogBuyer FindBuyer(long phoneNumber);
         DogBuyer AddBuyer(DogBuyer buyer);
         DogManager FindManager(long phoneNumber);
