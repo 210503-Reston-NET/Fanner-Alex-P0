@@ -2,6 +2,7 @@ using System;
 using DSModels;
 using DSBL;
 using System.Collections.Generic;
+using Serilog;
 namespace DSUI
 {
     public class ManagerMenu : IMenu
@@ -81,6 +82,7 @@ namespace DSUI
                 //_storeLoBL.AddStoreLocation(_store);
                 Console.WriteLine("Thanks!");
             }catch(Exception e){
+                Log.Error(e.Message);
                 Console.WriteLine("Error while stocking");
             }
         
@@ -98,6 +100,7 @@ namespace DSUI
                     repeat = false;
                 }
                 catch(Exception e){
+                    Log.Debug(e.Message);
                     repeat = true;
                     Console.WriteLine("That didn't work.");
                     Console.WriteLine("Enter q to exit or any other character to continue");

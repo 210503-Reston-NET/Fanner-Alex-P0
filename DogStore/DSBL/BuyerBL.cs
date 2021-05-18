@@ -21,7 +21,7 @@ namespace DSBL
 
         public List<DogBuyer> GetAllBuyers()
         {
-            throw new System.NotImplementedException();
+            return _repoDS.GetAllBuyers();
         }
     }
 }

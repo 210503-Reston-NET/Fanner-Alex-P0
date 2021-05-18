@@ -9,6 +9,7 @@ using System.IO;
 using System.Text.Json;
 using System;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 namespace DSDL
 {
     /// <summary>
@@ -24,6 +25,7 @@ namespace DSDL
         private Entity.FannerDogsDBContext _context;
         public Repo(Entity.FannerDogsDBContext context){
             _context = context;
+            Log.Debug("Created an instance of the repository");
         }
         /// <summary>
         /// Method to add store location to the file. Adds a store to a file and returns
@@ -63,7 +65,7 @@ namespace DSDL
                 _context.SaveChanges();
             }
             catch(Exception ex){
-                Console.WriteLine(ex.Message);
+                Log.Error(ex.Message+ "error encountered in AddStoreLocation, this shouldn't happen");
             }
             return store;
         }
@@ -119,14 +121,15 @@ namespace DSDL
                                         Dog.ItemId == i.DogId
                                         select Dog
                     ).Single();
-                    Console.WriteLine(dog.Breed);
-                    Console.WriteLine(dog.Gender.ToCharArray()[0].ToString());
-                    Console.WriteLine(dog.Price.ToString());
+                    Log.Information("Here's the item I'm about to create");
+                    Log.Information(dog.Breed);
+                    Log.Information(dog.Gender.ToCharArray()[0].ToString());
+                    Log.Information(dog.Price.ToString());
                     itemList.Add(new Model.Item(new Model.Dog(dog.Breed,dog.Gender.ToCharArray()[0], dog.Price),i.Quantity.Value));
                 }
                 return itemList;
             } catch(Exception e){
-            //    Console.WriteLine(e.Message);
+                Log.Error(e.Message+ " some issue with finding this inventory");
                 return new List<Model.Item>();
             }
         }
@@ -155,10 +158,11 @@ namespace DSDL
                                         ).Single();
                     inv.Quantity += quant;
                     _context.SaveChanges();
+                    Log.Information("Item found, quanty incremented: " + quant.ToString());
                     return newItem;
                 }
                 catch(Exception e){
-                    Console.WriteLine(e.Message);
+                    Log.Information(e.Message + "dog found but not inventory, adding dog to store's inventory");
                     Entity.Inventory inventory = new Entity.Inventory();
                     inventory.DogId = searchDog.ItemId;
                     inventory.Quantity = quant;
@@ -169,7 +173,7 @@ namespace DSDL
                 }
             }
             catch (Exception e){
-                Console.WriteLine(e.Message);
+                Log.Information(e.Message + "Dog not found, creating new dog");
                 Entity.Dog newDog = new Entity.Dog();
                 newDog.ItemId = new Random().Next();
                 newDog.Breed = dog.Breed;
@@ -191,21 +195,6 @@ namespace DSDL
                     _context.SaveChanges();
                     return newItem;
             }
-            /*try{
-            string add = FindStore(store.Address, store.Location).Address;
-            string loc = FindStore(store.Address, store.Location).Location;
-            GetStoreInventory(add, loc).First(item => item.Equals(newItem)).Quantity += quant;
-            GetStoreInventory(add, loc).First(item => item.Equals(newItem)).Dog.Price = dog.Price;
-            return newItem;
-            }
-            catch(Exception){
-                string add = FindStore(store.Address, store.Location).Address;
-                string loc = FindStore(store.Address, store.Location).Location;
-                Console.WriteLine("New item added");
-                GetAllStoreLocations().FirstOrDefault(stor => stor.Equals(store)).AddItem(newItem);
-                foreach(Item e in GetStoreInventory(add, loc)) Console.WriteLine(e.Dog.ToString());
-                return newItem;
-            }*/
         }
 
         /// <summary>
@@ -221,7 +210,7 @@ namespace DSDL
             //from DogStore in _context.DogStores where 
         }
         /// <summary>
-        /// Finds a store you're looking for and removes it from the JSON file.
+        /// Finds a store you're looking for and removes it NOT IMPLEMENTED
         /// </summary>
         /// <param name="address"> Address of the store you want to remove.</param>
         /// <param name="location"> Name of the store you want to remove.</param>
@@ -229,16 +218,19 @@ namespace DSDL
         public Model.StoreLocation RemoveStore(string address, string location){
             List<StoreLocation> storesFromFile = GetAllStoreLocations();
             StoreLocation store = FindStore(address, location);
-            /*storesFromFile.Remove(store);
-            jsonString = JsonSerializer.Serialize(storesFromFile);
-            File.WriteAllText(storePath, jsonString);*/
             _stores.Remove(store);
             return store;
         }
-
+        /// <summary>
+        /// Method which searches for a quantity of a dog at a given store,
+        /// throws an exception and returns null if item request is invalid.
+        /// </summary>
+        /// <param name="store">store to search for dogs</param>
+        /// <param name="dog">dog customer wishes to purchase</param>
+        /// <param name="quant">number of dogs customer wishes to purchase</param>
+        /// <returns>Item if store has it</returns>
         public Model.Item FindItem(StoreLocation store, Dog dog, int quant)
         {
-            //Item newItem = new Item(dog, quant);
             try{
                 string add = FindStore(store.Address, store.Location).Address;
                 string loc = FindStore(store.Address, store.Location).Location;
@@ -271,6 +263,13 @@ namespace DSDL
             }
         }
 
+        /// <summary>
+        /// Old method to update item, replaced by AddItem method
+        /// </summary>
+        /// <param name="store">store that manager wishes to update</param>
+        /// <param name="dog">dog to be updated</param>
+        /// <param name="quant">quantity of dog to be added</param>
+        /// <returns>Item updated</returns>
         public Model.Item UpdateItem(StoreLocation store, Dog dog, int quant)
         {
             try{
@@ -283,6 +282,13 @@ namespace DSDL
             }
         }
 
+        /// <summary>
+        /// Old method replaced by simpler AddOrder(DogOrder dogOrder)
+        /// </summary>
+        /// <param name="buyer">buyer purchasing</param>
+        /// <param name="total">order total</param>
+        /// <param name="sl">store to place order</param>
+        /// <returns>dog order added</returns>
         public Model.DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl)
         {
             DogOrder order = new DogOrder(buyer, total, sl);
@@ -294,7 +300,11 @@ namespace DSDL
             }
             return order;
         }
-
+        /// <summary>
+        /// Finds a buyer in the database based on the phone number.
+        /// </summary>
+        /// <param name="phoneNumber">phoneNumber of the user you're looking for</param>
+        /// <returns>Buyer if found, null otherwise</returns>
         public Model.DogBuyer FindBuyer(long phoneNumber)
         {
             try{
@@ -305,10 +315,15 @@ namespace DSDL
                                             ).Single();
                 return new Model.DogBuyer(dogBuyer.UserName, dogBuyer.UserAddress,dogBuyer.PhoneNumber);
             }catch(Exception e){
+                Log.Debug(e.Message);
                 return null;
             }
         }
-
+        /// <summary>
+        /// Adds buyer to the database and returns added buyer
+        /// </summary>
+        /// <param name="buyer"> buyer to be added to the database</param>
+        /// <returns>buyer added to the database</returns>
         public DogBuyer AddBuyer(DogBuyer buyer)
         {
             Entity.DogBuyer dogBuyer = new Entity.DogBuyer();
@@ -320,6 +335,11 @@ namespace DSDL
                     return buyer;
         }
 
+        /// <summary>
+        /// Finds manager in the database based on phone number
+        /// </summary>
+        /// <param name="phoneNumber">phone number to find the manager by</param>
+        /// <returns>manager in the database if found and null otherwise</returns>
         public DogManager FindManager(long phoneNumber)
         {
             try{
@@ -330,6 +350,7 @@ namespace DSDL
                                             ).Single();
                 return new Model.DogManager(dogManager.PhoneNumber,dogManager.UserAddress,dogManager.UserName);
             }catch(Exception e){
+                Log.Debug(e.Message);
                 return null;
             }
         }
@@ -383,11 +404,18 @@ namespace DSDL
             }
             catch(Exception e){
                 Console.WriteLine("Something went wrong :(");
-                Console.WriteLine(e.Message);
+                Log.Error(e.Message);
                 return null;
             }
         }
 
+        /// <summary>
+        /// Takes in a phone number of the user you're looking for and a special option
+        /// parameter where user has inputted the query they wish to perform
+        /// </summary>
+        /// <param name="phoneNumber">phone number of User whose orders you wish to find</param>
+        /// <param name="option">int where user has specified the query they wish to perform</param>
+        /// <returns>List of orders user has purchased</returns>
         public List<Model.DogOrder> FindUserOrders(long phoneNumber, int option)
         {
             Model.DogBuyer dogBuyer = FindBuyer(phoneNumber);
@@ -431,7 +459,6 @@ namespace DSDL
             Entity.DogStore dogStore;
             List<Entity.OrderItem> orderItems;
             List<Model.DogOrder> returnOrders = new List<Model.DogOrder>();
-            Model.StoreLocation storeLocation;
             Model.DogOrder returnOrder;
             Entity.Dog dog;
             foreach(Entity.DogOrder dogOrder in dogOrders){
@@ -475,6 +502,14 @@ namespace DSDL
             return returnOrders;
         }
 
+        /// <summary>
+        /// Takes in address and storelocation of order history you're looking for and a special option
+        /// parameter where user has inputted the query they wish to perform
+        /// </summary>
+        /// <param name="address">address of the store you're looking for orders of</param>
+        /// <param name="location">name of the store you're looking for orders of</param>
+        /// <param name="option">int where user has specified the query they wish to perform</param>
+        /// <returns>List of orders purchased at store</returns>
         public List<DogOrder> FindStoreOrders(string address, string location, int option)
         {
             Model.StoreLocation store = FindStore(address,location);
@@ -551,6 +586,29 @@ namespace DSDL
                 returnOrders.Add(returnOrder);
             }
             return returnOrders;
+        }
+
+        /// <summary>
+        /// Simple method that just gets all buyers in the database
+        /// </summary>
+        /// <returns>List of all customers in the database</returns>
+        public List<Model.DogBuyer> GetAllBuyers()
+        {
+            List<Entity.DogBuyer> dogBuyers = (
+                                                from DogBuyer in _context.DogBuyers
+                                                select DogBuyer
+            ).ToList();
+            List<Model.DogBuyer> returningDogBuyers = new List<Model.DogBuyer>();
+            foreach(Entity.DogBuyer dogBuyer in dogBuyers){
+                returningDogBuyers.Add(
+                    new DogBuyer(
+                        dogBuyer.UserName,
+                        dogBuyer.UserAddress,
+                        dogBuyer.PhoneNumber
+                    )
+                );
+            }
+            return returningDogBuyers;
         }
     }
 }

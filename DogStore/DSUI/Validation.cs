@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System;
+using Serilog;
 namespace DSUI
 {
     public class Validation : IValidation
@@ -22,6 +23,7 @@ namespace DSUI
                         Console.WriteLine("Incorrect Format, use Cityname, ST");
                     }
                 }catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Not a valid input, please try again");
                 }
             }while(repeat);
@@ -45,6 +47,7 @@ namespace DSUI
                         Console.WriteLine("Must be positive");
                     }
                 }catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Not a valid input, please try again");
                 }
 
@@ -69,6 +72,7 @@ namespace DSUI
                         Console.WriteLine("Must be positive");
                     }
                 }catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Not a valid input, please try again");
                 }
 
@@ -90,6 +94,7 @@ namespace DSUI
                         repeat = false;
                     }
                 } catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Something went wrong, try again");
                 }
             }while(repeat);
@@ -97,7 +102,6 @@ namespace DSUI
         }
         public string ValidateName(string message)
         {
-            //@"^[\w\s]+,\s\w{2}$"
             string enteredString = "";
             bool repeat = true;
             do{
@@ -112,6 +116,7 @@ namespace DSUI
                         Console.WriteLine("Incorrect Format, use Firstname Lastname");
                     }
                 }catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Not a valid input, please try again");
                 }
             }while(repeat);
@@ -136,6 +141,7 @@ namespace DSUI
                         Console.WriteLine("Incorrect Format, use 1234567890");
                     }
                 }catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Not a valid input, please try again");
                 }
             }while(repeat);
@@ -159,6 +165,7 @@ namespace DSUI
                         Console.WriteLine("Please enter either m or f");
                     }
                 }catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Not a valid input, please try again");
                 }
             }while(repeat);
@@ -180,6 +187,7 @@ namespace DSUI
                     if(enteredInt==1||enteredInt==2||enteredInt==3||enteredInt==4) repeat = false;
                     else Console.WriteLine("Not a valid number, try again");
                 }catch(Exception e){
+                    Log.Debug(e.Message);
                     Console.WriteLine("Not a valid input, please try again");
                 }
 

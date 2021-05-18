@@ -2,6 +2,7 @@ using System;
 using DSModels;
 using DSBL;
 using System.Collections.Generic;
+using Serilog;
 namespace DSUI
 {
     public class CustomerMenu : IMenu
@@ -39,7 +40,7 @@ namespace DSUI
                 Console.WriteLine("[3] Add a customer");
                 Console.WriteLine("[4] Find a customer");
                 Console.WriteLine("[5] See a customer's orders");
-                Console.WriteLine("[6] See a location's orders");
+                Console.WriteLine("[6] See a list of all customers");
                 string input = Console.ReadLine();
                 switch(input){
                     case "0":
@@ -57,12 +58,13 @@ namespace DSUI
                         AddCustomer();
                         break;
                     case "4":
+                        FindCustomer();
                         break;
                     case "5":
                         ViewOrders();
                         break;
-                    case "7":
-                        //StoreLocation storeLocation = _storeLoBL.AddStoreLocation(new StoreLocation("test", "here"));
+                    case "6":
+                        ViewCustomers();
                         break;
                     case "a":
 
@@ -72,6 +74,22 @@ namespace DSUI
                         break;
                 }
             }while(repeat);
+        }
+
+        private void ViewCustomers()
+        {
+            foreach(DogBuyer dogBuyer in _buyerBL.GetAllBuyers()){
+                Console.WriteLine("User Name: " + dogBuyer.Name + 
+                ", Address: " + dogBuyer.Address + ", Phone Number: " + dogBuyer.PhoneNumber);
+            }
+        }
+
+        private void FindCustomer()
+        {
+            long phoneNumber = validation.ValidatePhone("Enter the phone number for the customer you're looking for");
+            DogBuyer dogBuyer = _buyerBL.FindUser(phoneNumber);
+            if (dogBuyer == null) Console.WriteLine("User not found! Try adding user.");
+            else Console.WriteLine("User Info: " + dogBuyer.Name + " located in " + dogBuyer.Address);
         }
 
         private void ViewOrders()
@@ -143,9 +161,9 @@ namespace DSUI
             ViewStoreInv();
             repeat = true;
             _runningCount = 0;
-            string storeLocation = validation.ValidateString("Enter the store's name:");
-            string storeAddress = validation.ValidateAddress("Enter the store's address in format CityName, ST");
-            _dogOrder = new DogOrder(_dogBuyer,0,_storeLoBL.GetStore(storeAddress,storeLocation));
+            //string storeLocation = validation.ValidateString("Enter the store's name:");
+            //string storeAddress = validation.ValidateAddress("Enter the store's address in format CityName, ST");
+            _dogOrder = new DogOrder(_dogBuyer,0,_storeLoBL.GetStore(_address,_location));
             do{
                 
                 char gender = validation.ValidateGender("Enter the gender of dog you'd like to purchase");
@@ -156,6 +174,9 @@ namespace DSUI
                     _dogOrder.AddItemToOrder(lineItem);
                     _dogOrder.Total += ((double)quant * lineItem.Dog.Price);
                     }
+                else{
+                    Console.WriteLine("Not a valid item");
+                }
                 Console.WriteLine("Enter c to complete order or any other character to continue");
                 if(Console.ReadLine().Equals("c")) repeat = false;
                 //get all the items you want to order
@@ -177,6 +198,7 @@ namespace DSUI
                     repeat = false;
                 }
                 catch(Exception e){
+                    Log.Error(e.Message);
                     repeat = true;
                     Console.WriteLine("That didn't work.");
                     Console.WriteLine("Enter q to exit or any other character to continue");
