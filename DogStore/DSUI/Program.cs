@@ -11,6 +11,7 @@ namespace DSUI
     {
         static void Main(string[] args)
         {
+            //Setup for DB and Serilog
             var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
             string connectionString = configuration.GetConnectionString("FannerDogsDB");

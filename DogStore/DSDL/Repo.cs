@@ -625,6 +625,10 @@ namespace DSDL
             }
             return returningDogBuyers;
         }
+        /// <summary>
+        /// Simple method that returns all the managers in the database
+        /// </summary>
+        /// <returns>List of dog managers</returns>
 
         public List<DogManager> GetAllDogManagers()
         {

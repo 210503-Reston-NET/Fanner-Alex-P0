@@ -237,11 +237,17 @@ namespace DSUI
         {
             return _storeLoBL.GetAllStoreLocations();
         }
+        /// <summary>
+        /// In case I switch implementation, here's a simple store view
+        /// </summary>
         private void TrueViewStoreList(){
             foreach(StoreLocation s in ViewStoreList()){
                             Console.WriteLine(s.ToString());
                         }
         }
+        /// <summary>
+        /// Gets customers that share a name
+        /// </summary>
         private void ViewCustomerByName(){
             string name = validation.ValidateName("Please enter your name in the format Firstname Lastname");
             foreach(DogBuyer dogBuyer in _buyerBL.FindUserByName(name)){

@@ -1,5 +1,8 @@
 namespace DSUI
 {
+    /// <summary>
+    /// Validation interface, see implementation for comments
+    /// </summary>
     public interface IValidation
     {
         string ValidateString(string message);
