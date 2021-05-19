@@ -16,11 +16,20 @@ namespace DSUI
         private IValidation validation = new Validation();
         private DogBuyer _dogBuyer;
         private DogOrder _dogOrder;
+        /// <summary>
+        /// Menu for the customers
+        /// </summary>
+        /// <param name="StoreLoBL">StoreBL to be enacted upon</param>
+        /// <param name="BuyerBL">Buyer BL for buyer based queries</param>
+        /// <param name="OBL">Order BL for order based queries</param>
         public CustomerMenu( IStoreLocationBL StoreLoBL, IBuyerBL BuyerBL, IOrderBL OBL){
             this._storeLoBL = StoreLoBL;
             this._buyerBL = BuyerBL;
             this._orBL = OBL;
         }
+        /// <summary>
+        /// Method to call on start of menu
+        /// </summary>
         public void OnStart()
         {
             long phone = validation.ValidatePhone("Hello, please enter your phone number in the format 1234567890");
@@ -76,7 +85,9 @@ namespace DSUI
                 }
             }while(repeat);
         }
-
+        /// <summary>
+        /// Method which prints all customers in the database
+        /// </summary>
         private void ViewCustomers()
         {
             foreach(DogBuyer dogBuyer in _buyerBL.GetAllBuyers()){
@@ -84,7 +95,9 @@ namespace DSUI
                 ", Address: " + dogBuyer.Address + ", Phone Number: " + dogBuyer.PhoneNumber);
             }
         }
-
+        /// <summary>
+        /// finds a customer and prints if found
+        /// </summary>
         private void FindCustomer()
         {
             long phoneNumber = validation.ValidatePhone("Enter the phone number for the customer you're looking for");
@@ -92,13 +105,17 @@ namespace DSUI
             if (dogBuyer == null) Console.WriteLine("User not found! Try adding user.");
             else Console.WriteLine("User Info: " + dogBuyer.Name + " located in " + dogBuyer.Address);
         }
-
+        /// <summary>
+        /// takes in current user and allows queries to be performed on their orders
+        /// </summary>
         private void ViewOrders()
         {
             int orderOption = validation.ValidateOrderSearchOptions("Choose an option from the list!");
             foreach (DogOrder dogOrder in _orBL.FindUserOrders(_dogBuyer.PhoneNumber, orderOption)) Console.WriteLine(dogOrder.ToString());
         }
-
+        /// <summary>
+        /// allows customer to be added to database
+        /// </summary>
         private void AddCustomer()
         {
             long phone = validation.ValidatePhone("Hello, please enter your phone number in the format 1234567890");
@@ -112,7 +129,9 @@ namespace DSUI
                 Console.WriteLine("User is already in database.");
             }
         }
-
+        /// <summary>
+        /// Over-arching order method that gives customer the tools to perform an order
+        /// </summary>
         private void OrderDog()
         {
             string input;
@@ -185,7 +204,9 @@ namespace DSUI
             if(_orBL.AddOrder(_dogOrder)==null) Console.WriteLine("If you're seeing this, something went terribly wrong");
             //send the list of items to the database and remove them from the store's inventory
         }
-
+        /// <summary>
+        /// prints a store's inventory for a given store
+        /// </summary>
         private void ViewStoreInv()
         {
             bool repeat = true;
@@ -207,10 +228,18 @@ namespace DSUI
                 }
             } while(repeat);
         }
-
+        /// <summary>
+        /// gets and returns store list
+        /// </summary>
+        /// <returns> list of stores</returns>
         private List<StoreLocation> ViewStoreList()
         {
             return _storeLoBL.GetAllStoreLocations();
+        }
+        private void TrueViewStoreList(){
+            foreach(StoreLocation s in ViewStoreList()){
+                            Console.WriteLine(s.ToString());
+                        }
         }
     }
 }

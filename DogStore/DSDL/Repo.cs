@@ -340,7 +340,11 @@ namespace DSDL
                 return null;
             }
         }
-
+        /// <summary>
+        /// Adds a manager to the database
+        /// </summary>
+        /// <param name="manager">manager to be added</param>
+        /// <returns>added manager</returns>
         public DogManager AddManager(DogManager manager)
         {
             Entity.DogManager dogManager = new Entity.DogManager();
@@ -351,7 +355,11 @@ namespace DSDL
                     _context.SaveChanges();
                     return manager;
         }
-
+        /// <summary>
+        /// Adds order to the database
+        /// </summary>
+        /// <param name="dogOrder">dog order to be added to the database</param>
+        /// <returns>order added to the database</returns>
         public DogOrder AddOrder(DogOrder dogOrder)
         {
             try{

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Entity = DSDL.Entities;
 namespace DSDL
 {
+    /// <summary>
+    /// Interface, see class for comments
+    /// </summary>
     public interface IRepo
     {
         List<StoreLocation> GetAllStoreLocations();
