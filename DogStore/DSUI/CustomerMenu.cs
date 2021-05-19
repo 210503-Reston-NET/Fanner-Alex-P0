@@ -50,6 +50,7 @@ namespace DSUI
                 Console.WriteLine("[4] Find a customer");
                 Console.WriteLine("[5] See a customer's orders");
                 Console.WriteLine("[6] See a list of all customers");
+                Console.WriteLine("[7] Find a customer by name");
                 Console.WriteLine("Enter anything else to return");
                 string input = Console.ReadLine();
                 switch(input){
@@ -76,8 +77,8 @@ namespace DSUI
                     case "6":
                         ViewCustomers();
                         break;
-                    case "a":
-
+                    case "7":
+                        ViewCustomerByName();
                         break;
                     default:
                         repeat = false;
@@ -240,6 +241,13 @@ namespace DSUI
             foreach(StoreLocation s in ViewStoreList()){
                             Console.WriteLine(s.ToString());
                         }
+        }
+        private void ViewCustomerByName(){
+            string name = validation.ValidateName("Please enter your name in the format Firstname Lastname");
+            foreach(DogBuyer dogBuyer in _buyerBL.FindUserByName(name)){
+                if (dogBuyer == null) Console.WriteLine("User not found! Try adding user.");
+                else Console.WriteLine("User Info: " + dogBuyer.Name + " located in " + dogBuyer.Address);
+            }
         }
     }
 }

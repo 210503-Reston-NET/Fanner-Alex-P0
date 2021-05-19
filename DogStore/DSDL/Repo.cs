@@ -306,6 +306,27 @@ namespace DSDL
             }
         }
         /// <summary>
+        /// Find a buyer based on the name
+        /// </summary>
+        /// <param name="name">name to find</param>
+        /// <returns>list of people with that name</returns>
+        public List<Model.DogBuyer> FindBuyerByName(string name)
+        {
+            try{
+                List<Entity.DogBuyer> dogBuyers = (
+                                            from DogBuyer in _context.DogBuyers where 
+                                            DogBuyer.UserName == name
+                                            select DogBuyer
+                                            ).ToList();
+                List<Model.DogBuyer> dogBuyers1= new List<Model.DogBuyer>();
+                foreach(Entity.DogBuyer dogBuyer in dogBuyers) dogBuyers1.Add(new Model.DogBuyer(dogBuyer.UserName, dogBuyer.UserAddress,dogBuyer.PhoneNumber));
+                return dogBuyers1;
+            }catch(Exception e){
+                Log.Debug(e.Message);
+                return null;
+            }
+        }
+        /// <summary>
         /// Adds buyer to the database and returns added buyer
         /// </summary>
         /// <param name="buyer"> buyer to be added to the database</param>

@@ -19,6 +19,11 @@ namespace DSBL
             return _repoDS.FindBuyer(phone);
         }
 
+        public List<DogBuyer> FindUserByName(string name)
+        {
+            return _repoDS.FindBuyerByName(name);
+        }
+
         public List<DogBuyer> GetAllBuyers()
         {
             return _repoDS.GetAllBuyers();
