@@ -610,5 +610,24 @@ namespace DSDL
             }
             return returningDogBuyers;
         }
+
+        public List<DogManager> GetAllDogManagers()
+        {
+            List<Entity.DogManager> dogManagers = (
+                                                from DogManager in _context.DogManagers
+                                                select DogManager
+            ).ToList();
+            List<Model.DogManager> returningDogManagers = new List<Model.DogManager>();
+            foreach(Entity.DogManager dogManager in dogManagers){
+                returningDogManagers.Add(
+                    new DogManager(
+                        dogManager.PhoneNumber,
+                        dogManager.UserAddress,
+                        dogManager.UserName
+                    )
+                );
+            }
+            return returningDogManagers;
+        }
     }
 }

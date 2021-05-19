@@ -41,6 +41,7 @@ namespace DSUI
                 Console.WriteLine("[4] Find a customer");
                 Console.WriteLine("[5] See a customer's orders");
                 Console.WriteLine("[6] See a list of all customers");
+                Console.WriteLine("Enter anything else to return");
                 string input = Console.ReadLine();
                 switch(input){
                     case "0":

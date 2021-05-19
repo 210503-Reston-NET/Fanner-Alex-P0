@@ -38,6 +38,7 @@ namespace DSUI
                 Console.WriteLine("[1] Stock some shelves");
                 Console.WriteLine("[2] View a store's inventory");
                 Console.WriteLine("[3] View a store's order history");
+                Console.WriteLine("Enter anything else to return");
                 string input = Console.ReadLine();
                 switch(input){
                     case "0":
@@ -55,12 +56,24 @@ namespace DSUI
                     case "3":
                         ViewOrders();
                         break;
+                    case "4":
+                        ViewManagers();
+                        break;
                     default:
                         repeat = false;
                         break;
                 }
             }while(repeat);
         }
+
+        private void ViewManagers()
+        {
+            foreach(DogManager dogManager in _mBL.GetAllManagers()){
+                Console.WriteLine("User Name: " + dogManager.Name + 
+                ", Address: " + dogManager.Address + ", Phone Number: " + dogManager.PhoneNumber);
+            }
+        }
+
         private void StockShelves(){    
             _location = validation.ValidateString("Enter the store's name:");
             _address = validation.ValidateAddress("Enter the store's address in format CityName, ST");

@@ -34,7 +34,7 @@ namespace DSBL
 
         public List<DogManager> GetAllManagers()
         {
-            throw new System.NotImplementedException();
+            return _repoDS.GetAllDogManagers();
         }
     }
 }

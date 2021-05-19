@@ -21,5 +21,6 @@ namespace DSDL
         List<DogOrder> FindUserOrders(long phoneNumber, int option);
         List<DogOrder> FindStoreOrders(string address, string location, int option);
         List<DogBuyer> GetAllBuyers();
+        List<DogManager>GetAllDogManagers();
     }
 }
