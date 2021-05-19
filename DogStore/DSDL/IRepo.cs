@@ -7,6 +7,7 @@ namespace DSDL
     {
          List<StoreLocation> GetAllStoreLocations();
         StoreLocation AddStoreLocation(StoreLocation store, DogManager dogManager);
+        StoreLocation FindStore(string address, string location);
 
         List<Item> GetStoreInventory(string address, string location);
         Item FindItem(StoreLocation store, Dog dog, int quant);
