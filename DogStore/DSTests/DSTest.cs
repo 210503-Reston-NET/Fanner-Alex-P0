@@ -18,6 +18,9 @@ namespace DSTests
             Seed();
         }
         [Fact]
+        /// <summary>
+        /// Checks AddManager and FindManager for functionality
+        /// </summary>
         public void AddManagerAddsManager()
         {
             using (var context = new Entity.FannerDogsDBContext(options))
@@ -33,6 +36,9 @@ namespace DSTests
             }
         }
         [Fact]
+        /// <summary>
+        /// Checks AddStoreLocation and FindStore
+        /// </summary>
         public void AddStoreLocationAddsStore()
         {
             using (var context = new Entity.FannerDogsDBContext(options))
@@ -54,6 +60,9 @@ namespace DSTests
             }
         }
         [Fact]
+        /// <summary>
+        /// Checks AddBuyer and FindBuyer
+        /// </summary>
         public void AddBuyerAddsBuyer()
         {
             using (var context = new Entity.FannerDogsDBContext(options))
@@ -69,6 +78,9 @@ namespace DSTests
             }
         }
         [Fact]
+        /// <summary>
+        /// Checks GetAllDogManagers
+        /// </summary>
         public void GetAllManagersGetsManagers()
         {
             using (var context = new Entity.FannerDogsDBContext(options))
@@ -90,6 +102,9 @@ namespace DSTests
             }
         }
         [Fact]
+        /// <summary>
+        /// Checks GetAllBuyers
+        /// </summary>
         public void GetAllBuyersGetsBuyers()
         {
             using (var context = new Entity.FannerDogsDBContext(options))
@@ -109,6 +124,41 @@ namespace DSTests
                 int expected = 2;
                 Assert.Equal(dogBuyers.Count, expected);
             }
+        }
+        [Fact]
+        /// <summary>
+        /// Checks AddItem and FindItem
+        /// </summary>
+        public void AddItemShouldBeFound(){
+            using (var context = new Entity.FannerDogsDBContext(options))
+            {
+                IRepo _repoDS = new Repo(context);
+                Model.DogManager dogManager= new Model.DogManager(1234567890,"Test, TX","Texas Toaster");
+                _repoDS.AddManager
+                (
+                    dogManager
+                );
+                Model.StoreLocation storeLocation = new Model.StoreLocation("Test, TX", "Test Dogs");
+                _repoDS.AddStoreLocation(
+                    storeLocation,
+                    dogManager
+                );
+                Model.Dog dog = new Model.Dog("Special Breed",'f',1000);
+                _repoDS.AddItem(
+                    storeLocation,
+                    dog,
+                    5
+                );
+                Model.Item item = _repoDS.FindItem(
+                    storeLocation,
+                    dog,
+                    5
+                );
+                bool itemThere = (item != null);
+                bool expected = true;
+                Assert.Equal(itemThere, expected);
+            }
+
         }
         private void Seed(){
             using(var context = new Entity.FannerDogsDBContext(options)){

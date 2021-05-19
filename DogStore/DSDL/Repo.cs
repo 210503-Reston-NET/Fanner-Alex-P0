@@ -13,7 +13,7 @@ using Serilog;
 namespace DSDL
 {
     /// <summary>
-    /// Repository class to store data in JSON file.
+    /// Repository class to store data in SQL database
     /// </summary>
     public class Repo : IRepo
     {
@@ -35,15 +35,6 @@ namespace DSDL
         // <returns>Return added StoreLocation</returns>
         public Model.StoreLocation AddStoreLocation(Model.StoreLocation store, Model.DogManager dogManager)
         {
-            /*List<StoreLocation> storesFromFile = GetAllStoreLocations();
-            storesFromFile.Add(store);
-            jsonString = JsonSerializer.Serialize(storesFromFile);
-            foreach(StoreLocation s in storesFromFile){
-                invPath = "../DSDL/"+s.Location;
-                jsonInv = JsonSerializer.Serialize(s.GetInventory());
-                File.WriteAllText(invPath, jsonInv);
-            }
-            File.WriteAllText(storePath, jsonString);*/
             try{
                 Entity.DogStore dogStore = new Entity.DogStore();
                 dogStore.StoreName = store.Location;
@@ -76,17 +67,6 @@ namespace DSDL
         /// <returns>List of StoreLocation stored in the JSON</returns>
         public List<Model.StoreLocation> GetAllStoreLocations()
         {
-            /*try{
-                jsonString = File.ReadAllText(storePath);
-            } catch(Exception){
-                return new List<StoreLocation>();
-            }
-            List<StoreLocation> sList = JsonSerializer.Deserialize<List<StoreLocation>>(jsonString);
-            foreach(StoreLocation s in sList){
-                invPath = "../DSDL/"+s.Location;
-                jsonInv = File.ReadAllText(invPath);
-                s.SetInventory(JsonSerializer.Deserialize<List<Item>>(jsonInv));
-            }*/
             List<Model.StoreLocation> storeList = new List<Model.StoreLocation>();
             List<Entity.DogStore> dogStoreList = (from DogStore in _context.DogStores select DogStore).ToList();
             foreach(Entity.DogStore dS in dogStoreList){
@@ -133,7 +113,13 @@ namespace DSDL
                 return new List<Model.Item>();
             }
         }
-
+        /// <summary>
+        /// Adds an item to a stores inventory, creates dog if not found then adds it to the inventory
+        /// </summary>
+        /// <param name="store">Store to add inventory to</param>
+        /// <param name="dog">Dog to add</param>
+        /// <param name="quant">Quantity of Dog to add</param>
+        /// <returns>Added item</returns>
         public Model.Item AddItem(StoreLocation store, Dog dog, int quant)
         {
             Item newItem = new Item(dog, quant);
@@ -258,7 +244,7 @@ namespace DSDL
                 }
             }
             catch(Exception){
-                Console.WriteLine("Item not found");
+                Log.Error("Item not found");
                 return null;
             }
         }

@@ -21,6 +21,9 @@ namespace DSUI
             this._orBL = OBL;
             this._mBL = MBL;
         }
+        /// <summary>
+        /// Method that opens starting state of the menu
+        /// </summary>
         public void OnStart()
         {
             long phone = validation.ValidatePhone("Hello, please enter your phone number in the format 1234567890");
@@ -38,6 +41,7 @@ namespace DSUI
                 Console.WriteLine("[1] Stock some shelves");
                 Console.WriteLine("[2] View a store's inventory");
                 Console.WriteLine("[3] View a store's order history");
+                Console.WriteLine("[4] View a list of managers");
                 Console.WriteLine("Enter anything else to return");
                 string input = Console.ReadLine();
                 switch(input){
@@ -65,7 +69,9 @@ namespace DSUI
                 }
             }while(repeat);
         }
-
+        /// <summary>
+        /// Method that prints out all the managers in the database
+        /// </summary>
         private void ViewManagers()
         {
             foreach(DogManager dogManager in _mBL.GetAllManagers()){
@@ -73,7 +79,9 @@ namespace DSUI
                 ", Address: " + dogManager.Address + ", Phone Number: " + dogManager.PhoneNumber);
             }
         }
-
+        /// <summary>
+        /// Method that allows manager to stock the shelves and prompts them accordingly
+        /// </summary>
         private void StockShelves(){    
             _location = validation.ValidateString("Enter the store's name:");
             _address = validation.ValidateAddress("Enter the store's address in format CityName, ST");
@@ -100,6 +108,9 @@ namespace DSUI
             }
         
         }
+        /// <summary>
+        /// Method that prints a provided store inventory
+        /// </summary>
         private void ViewStoreInv()
         {
             bool repeat = true;
@@ -121,6 +132,9 @@ namespace DSUI
                 }
             } while(repeat);
         }
+        /// <summary>
+        /// Allows user to view a provided store's order history in a way which they choose
+        /// </summary>
         private void ViewOrders()
         {
             _location = validation.ValidateString("Enter the store's name:");
