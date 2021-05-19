@@ -5,7 +5,7 @@ namespace DSDL
 {
     public interface IRepo
     {
-         List<StoreLocation> GetAllStoreLocations();
+        List<StoreLocation> GetAllStoreLocations();
         StoreLocation AddStoreLocation(StoreLocation store, DogManager dogManager);
         StoreLocation FindStore(string address, string location);
 

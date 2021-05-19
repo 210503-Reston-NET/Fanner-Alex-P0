@@ -6,9 +6,13 @@ namespace DSUI
 {
     public class Validation : IValidation
     {
+        /// <summary>
+        /// Makes sure address is in valid form
+        /// </summary>
+        /// <param name="message">message to prompt user</param>
+        /// <returns>correctly formatted address string</returns>
         public string ValidateAddress(string message)
         {
-            //@"^[\w\s]+,\s\w{2}$"
             string enteredString = "";
             bool repeat = true;
             do{
@@ -29,7 +33,11 @@ namespace DSUI
             }while(repeat);
             return enteredString;
         }
-
+        /// <summary>
+        /// Makes sure double entered for the dog is valid
+        /// </summary>
+        /// <param name="message">message to prompt user</param>
+        /// <returns>double to be set as price</returns>
         public double ValidateDouble(string message)
         {
             double enteredDouble = 0;
@@ -54,7 +62,11 @@ namespace DSUI
             }while(repeat);
             return enteredDouble;
         }
-
+        /// <summary>
+        /// Makes sure int for quantity is a valid int
+        /// </summary>
+        /// <param name="message">prompt for user to enter int</param>
+        /// <returns>valid int</returns>
         public int ValidateInt(string message)
         {
             int enteredInt = 0;
@@ -79,7 +91,11 @@ namespace DSUI
             }while(repeat);
             return enteredInt;
         }
-
+        /// <summary>
+        /// Makes sure user is inputting a valid string
+        /// </summary>
+        /// <param name="message">prompt for user to enter in a string</param>
+        /// <returns>valid string</returns>
         public string ValidateString(string message)
         {
             string entererdString = "";
@@ -100,6 +116,11 @@ namespace DSUI
             }while(repeat);
             return entererdString;
         }
+        /// <summary>
+        /// Makes sure user is entering a valid name
+        /// </summary>
+        /// <param name="message">message to prompt user to enter in name</param>
+        /// <returns>valid name</returns>
         public string ValidateName(string message)
         {
             string enteredString = "";
@@ -122,7 +143,11 @@ namespace DSUI
             }while(repeat);
             return enteredString;
         }
-
+        /// <summary>
+        /// Method that makes sure user is entering in a valid phone number
+        /// </summary>
+        /// <param name="message">prompt for user to enter in phone number</param>
+        /// <returns>long value representing user's phone number</returns>
         public long ValidatePhone(string message)
         {
             long phoneNumber = 0;
@@ -147,6 +172,11 @@ namespace DSUI
             }while(repeat);
             return phoneNumber;
         }
+        /// <summary>
+        /// makes sure user is entering in a valid character either m or f for gender
+        /// </summary>
+        /// <param name="message"> prompt for the user to enter in gender</param>
+        /// <returns>char representing gender</returns>
         public char ValidateGender(string message)
         {
             char gender = 'm';
@@ -171,7 +201,11 @@ namespace DSUI
             }while(repeat);
             return gender;
         }
-
+        /// <summary>
+        /// Allows user to choose which query they want to preform on the order histories
+        /// </summary>
+        /// <param name="message">prompt for user to enter in integer</param>
+        /// <returns>int corresponding to selected option</returns>
         public int ValidateOrderSearchOptions(string message)
         {
             int enteredInt = 0;
