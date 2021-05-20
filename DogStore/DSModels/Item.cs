@@ -3,7 +3,7 @@ namespace DSModels
     /// <summary>
     /// Class allowing store to keep a dog as well as the quantity in the store.
     /// </summary>
-    public class Item
+    public abstract class Item
     {
         /// <summary>
         /// Basic constructor to initalize an item
@@ -19,6 +19,7 @@ namespace DSModels
         /// </summary>
         /// <value></value>
         public Dog Dog {get; set; }
+        public int DogId {get;set;}
         /// <summary>
         /// Integer representing the number of dogs at the store
         /// </summary>

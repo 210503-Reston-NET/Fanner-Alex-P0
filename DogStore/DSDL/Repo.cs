@@ -17,11 +17,8 @@ namespace DSDL
     /// </summary>
     public class Repo : IRepo
     {
-        private string invPath;
-        private string jsonInv;
         private List<Model.StoreLocation> _stores;
-        private List<DogOrder> _orders;
-        private List<DogBuyer> _buyers;
+        
         private Entity.FannerDogsDBContext _context;
         public Repo(Entity.FannerDogsDBContext context){
             _context = context;
@@ -105,7 +102,7 @@ namespace DSDL
                     Log.Information(dog.Breed);
                     Log.Information(dog.Gender.ToCharArray()[0].ToString());
                     Log.Information(dog.Price.ToString());
-                    itemList.Add(new Model.Item(new Model.Dog(dog.Breed,dog.Gender.ToCharArray()[0], dog.Price),i.Quantity.Value));
+                    itemList.Add(new Model.Inventory(new Model.Dog(dog.Breed,dog.Gender.ToCharArray()[0], dog.Price),i.Quantity.Value));
                 }
                 return itemList;
             } catch(Exception e){
@@ -122,7 +119,7 @@ namespace DSDL
         /// <returns>Added item</returns>
         public Model.Item AddItem(StoreLocation store, Dog dog, int quant)
         {
-            Item newItem = new Item(dog, quant);
+            Item newItem = new Model.Inventory(dog, quant);
             try{
                 Entity.Dog searchDog = (
                                         from Dog in _context.Dogs where 
@@ -240,7 +237,7 @@ namespace DSDL
                     throw new Exception();
                 }
                 else {
-                    return new Model.Item(new Dog(searchDog.Breed,searchDog.Gender.ToCharArray()[0],searchDog.Price,searchDog.ItemId),quant);
+                    return new Model.OrderItem(new Dog(searchDog.Breed,searchDog.Gender.ToCharArray()[0],searchDog.Price,searchDog.ItemId),quant);
                 }
             }
             catch(Exception){
@@ -264,28 +261,11 @@ namespace DSDL
                 return itemToBeInc;
             }catch(Exception){
                 Console.WriteLine("Item not found");
-                return new Item(dog, quant);
+                return new Inventory(dog, quant);
             }
         }
 
-        /// <summary>
-        /// Old method replaced by simpler AddOrder(DogOrder dogOrder)
-        /// </summary>
-        /// <param name="buyer">buyer purchasing</param>
-        /// <param name="total">order total</param>
-        /// <param name="sl">store to place order</param>
-        /// <returns>dog order added</returns>
-        public Model.DogOrder AddOrder(DogBuyer buyer, double total, StoreLocation sl)
-        {
-            DogOrder order = new DogOrder(buyer, total, sl);
-            try{
-                _orders.Add(order);
-            }catch(Exception){
-                _orders = new List<DogOrder>();
-                _orders.Add(order);
-            }
-            return order;
-        }
+        
         /// <summary>
         /// Finds a buyer in the database based on the phone number.
         /// </summary>
@@ -503,7 +483,7 @@ namespace DSDL
                             Dog.ItemId == orderItem.DogId
                             select Dog
                     ).Single();
-                    returnOrder.AddItemToOrder(new Model.Item(
+                    returnOrder.AddItemToOrder(new Model.OrderItem(
                         new Model.Dog(
                             dog.Breed,
                             dog.Gender.ToCharArray()[0],
@@ -589,7 +569,7 @@ namespace DSDL
                             Dog.ItemId == orderItem.DogId
                             select Dog
                     ).Single();
-                    returnOrder.AddItemToOrder(new Model.Item(
+                    returnOrder.AddItemToOrder(new Model.OrderItem(
                         new Model.Dog(
                             dog.Breed,
                             dog.Gender.ToCharArray()[0],

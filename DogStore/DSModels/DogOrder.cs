@@ -19,6 +19,8 @@ namespace DSModels
         public DogOrder(DogBuyer buyer, double tot, StoreLocation sl, int id): this(buyer, tot, sl){
             this.id = id;
         }
+        public int StoreId{get;set;}
+        public int BuyerId{get;set;}
         public DateTime OrderDate{get;set;}
         /// <summary>
         /// Customer ordering the dogs, represented by DogBuyer.
